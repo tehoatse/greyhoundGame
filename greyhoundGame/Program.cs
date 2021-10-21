@@ -161,6 +161,7 @@ namespace greyhoundGame
             CreateStats(stats);
         }
 
+        // returns a list of all the statistics on this list
         public Stat[] ListStats()
         {
             Stat[] returnList = {
@@ -259,7 +260,8 @@ namespace greyhoundGame
 
         public Results Start()
         {
-            
+            Results results = new Results();
+            return results;
         }
 
 
