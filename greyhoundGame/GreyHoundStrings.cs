@@ -1,5 +1,5 @@
 ﻿namespace greyhoundGame
-{    public static class GreyHoundStrings
+{    public static class GreyhoundStrings
     {
         //a list of strings to apply to names and descriptions of statistics
         public static string TopSpeed = "Top Speed";

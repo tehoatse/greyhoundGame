@@ -207,18 +207,18 @@ namespace greyhoundGame
         // the contructors use this to CreateStats()
         private void CreateStats()
         {
-            TopSpeed = new Stat(GreyHoundStrings.TopSpeed, GreyHoundStrings.TopSpeedDesc);
-            Stamina = new Stat(GreyHoundStrings.Stamina, GreyHoundStrings.StaminaDesc);
-            Acceleration = new Stat(GreyHoundStrings.Accelertion, GreyHoundStrings.AccelerationDesc);
-            Health = new Stat(GreyHoundStrings.Health, GreyHoundStrings.HealthDesc);
-            Armor = new Stat(GreyHoundStrings.Armor, GreyHoundStrings.ArmorDesc);
-            Confidence = new Stat(GreyHoundStrings.Confidence, GreyHoundStrings.ConfidenceDesc);
-            Tenacity = new Stat(GreyHoundStrings.Tenacity, GreyHoundStrings.TenacityDesc);
-            Balance = new Stat(GreyHoundStrings.Balance, GreyHoundStrings.BalanceDesc);
-            Agility = new Stat(GreyHoundStrings.Agility, GreyHoundStrings.AgilityDesc);
-            Strength = new Stat(GreyHoundStrings.Strength, GreyHoundStrings.StrengthDesc);
-            Aggression = new Stat(GreyHoundStrings.Aggression, GreyHoundStrings.AggressionDesc);
-            Fitness = new Stat(GreyHoundStrings.Fitness, GreyHoundStrings.FitnessDesc);
+            TopSpeed = new Stat(GreyhoundStrings.TopSpeed, GreyhoundStrings.TopSpeedDesc);
+            Stamina = new Stat(GreyhoundStrings.Stamina, GreyhoundStrings.StaminaDesc);
+            Acceleration = new Stat(GreyhoundStrings.Accelertion, GreyhoundStrings.AccelerationDesc);
+            Health = new Stat(GreyhoundStrings.Health, GreyhoundStrings.HealthDesc);
+            Armor = new Stat(GreyhoundStrings.Armor, GreyhoundStrings.ArmorDesc);
+            Confidence = new Stat(GreyhoundStrings.Confidence, GreyhoundStrings.ConfidenceDesc);
+            Tenacity = new Stat(GreyhoundStrings.Tenacity, GreyhoundStrings.TenacityDesc);
+            Balance = new Stat(GreyhoundStrings.Balance, GreyhoundStrings.BalanceDesc);
+            Agility = new Stat(GreyhoundStrings.Agility, GreyhoundStrings.AgilityDesc);
+            Strength = new Stat(GreyhoundStrings.Strength, GreyhoundStrings.StrengthDesc);
+            Aggression = new Stat(GreyhoundStrings.Aggression, GreyhoundStrings.AggressionDesc);
+            Fitness = new Stat(GreyhoundStrings.Fitness, GreyhoundStrings.FitnessDesc);
 
         }
 
@@ -266,17 +266,24 @@ namespace greyhoundGame
             finishers.Add(new Finisher(hound, time));
         }
 
-
-        
     }
 
     
     class Finisher
     {
         // basic class to hold finishing information for the results
+
+        private int _position;
         public Greyhound Hound { get; private set; }
         public int Time { get; private set; }
-        public int Position { get; set; }
+        public int Position { 
+            get => _position;
+            set
+            {
+                _position = value;
+                PositionName = GreyhoundStrings.GetOrdinalName(value);
+            } 
+        }
         public string PositionName { get; private set; }
 
         public Finisher(Greyhound hound, int time)
