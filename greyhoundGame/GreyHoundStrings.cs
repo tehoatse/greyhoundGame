@@ -120,12 +120,14 @@
 
         public static string GetOrdinalName(int i)
         {
-            return OrdinalNames[i];
+            // send an int, get back the ordinal name 'first' etc
+            return OrdinalNames[i-1];
         }
 
         public static string GetOrdinalNum(int i)
         {
-            return OrdinalNum[i];
+            // send an int, get back the ordinal abbreviation '1st' etc
+            return OrdinalNum[i-1];
         }
 
     }

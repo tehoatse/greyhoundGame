@@ -168,7 +168,7 @@ namespace greyhoundGame
         public void AddFinisher(RaceGreyhound hound, int time)
         {
             finishers.Add(new Finisher(hound, time));
-            finishers[finishers.Count-1].Position = finishers.Count-1; // this is stupid
+            finishers[finishers.Count-1].Position = finishers.Count; // this is stupid
         }
 
         public override string ToString()
