@@ -9,8 +9,7 @@ namespace greyhoundGame
             Console.WriteLine("Let's build us a baby greyhound!");
             Console.WriteLine("Building dat greyhound!");
             Greyhound baby = new Greyhound();
-            Console.WriteLine(baby.ToString());   
-
+            Console.WriteLine(baby.ToString());
         }
     }
 
@@ -225,91 +224,6 @@ namespace greyhoundGame
                 outString += stat.ToString();
             }
             return outString;
-        }
-    }
-
-    class Race
-    {
-        // greyhounds run a race, lets see who's the fastest!
-        // the greyhounds in the race
-        public Greyhound[] Greyhounds { get; private set; }
-        
-        //the length of the race
-        public int Length { get; private set; }
-
-        private RaceGreyhound[] raceHounds;
-
-        public Race(Greyhound[] greyhounds)
-        {
-            Greyhounds = greyhounds;
-            Length = 500;
-            raceHounds = new RaceGreyhound[greyhounds.Length];
-
-            // so we're putting them all in the race, registering them basically and salting them at the same time
-            for (int i = 0; i < Greyhounds.Length; i++)
-            {
-                raceHounds[i] = new RaceGreyhound(Greyhounds[i]);
-            }
-        }
-
-        public Race(Greyhound[] greyhounds, int length )
-        {
-            Greyhounds = greyhounds;
-            Length = length;
-        }
-
-        public Results Start()
-        {
-            Results results = new Results();
-            return results;
-        }
-
-
-    }
-
-    class RaceGreyhound
-    {
-        // we're using this class to describe a greyhound on raceday so we're not altering its stats on the day
-        // I guess we're using this to add a bunch of data to greyhound
-        Greyhound Hound;
-        public int CurrentSpeed { get; set; }
-        public int CurrentStam { get; set; }
-        public int SaltedTopSpeed { get; private set; }
-        public int SaltedTenacity { get; private set; }
-        public int SaltedAcceleration { get; private set; }
-
-        public RaceGreyhound(Greyhound hound)
-        {
-            Hound = hound;
-            CurrentSpeed = 0;
-            CurrentStam = Hound.Stats.Stamina.StatValue + getSalt();
-            SaltedTopSpeed = Hound.Stats.TopSpeed.StatValue + getSalt();
-            SaltedTenacity = Hound.Stats.Tenacity.StatValue + getSalt();
-            SaltedAcceleration = Hound.Stats.Tenacity.StatValue + getSalt();
-        }
-
-        // generating a modifier to make thing random
-        private int getSalt()
-        {
-            Random dice = new Random();
-
-            int result = dice.Next(1, 100);
-
-            // so each statment has a return on it so I'm eliminating results
-            // I'm not sure if the result periods are even and I don't care right now
-            if (result <= 4)
-                return -20; //nasty!
-            if (result <= 20)
-                return -10;
-            if (result <= 40)
-                return -5;
-            if (result <= 60)
-                return 0;
-            if (result <= 80)
-                return 5;
-            if (result <= 97)
-                return 10;
-            return 20; // aaaaawesome!
         }
     }
 
