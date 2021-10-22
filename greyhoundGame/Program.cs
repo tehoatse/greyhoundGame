@@ -17,6 +17,7 @@ namespace greyhoundGame
             Console.WriteLine("We're gunna make a greyhound with all 80s!");
             Console.WriteLine("Building dat greyhound!");
             Greyhound allEighties = new Greyhound();
+            Greyhound allEighties2 = new Greyhound();
 
             // good old all eighties!
             allEighties.Name = "All Eighties";
@@ -26,7 +27,14 @@ namespace greyhoundGame
             allEighties.Stats.Acceleration.StatValue = 80;
             allEighties.Stats.Tenacity.StatValue = 80;
 
-            Greyhound[] hounds = { allEighties };
+            allEighties2.Name = "All Eighties the Second";
+            allEighties2.Age = 2;
+            allEighties2.Stats.Stamina.StatValue = 80;
+            allEighties2.Stats.TopSpeed.StatValue = 80;
+            allEighties2.Stats.Acceleration.StatValue = 80;
+            allEighties2.Stats.Tenacity.StatValue = 80;
+
+            Greyhound[] hounds = { allEighties, allEighties2 };
 
             Race testRace = new Race(hounds);
             testRace.Start();

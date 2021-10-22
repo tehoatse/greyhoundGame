@@ -91,13 +91,6 @@ namespace greyhoundGame
                     if (hound.DistanceTravelled >= Distance)
                         hound.Finished = true;
 
-
-                    if (hound.Finished)
-                        finishedCounter++;
-
-                    if (finishedCounter == raceHounds.Length)
-                        going = false;
-
                     // we're gunna build the log string here
                     string outString = 
                         $"Name: {hound.Greyhound.Name} " +
@@ -107,11 +100,23 @@ namespace greyhoundGame
                         $"Finished?: {hound.Finished}\n";
 
                     LogText.Dump(outString);
-
-                    Console.WriteLine("tick!");
-
                 }
             }
+
+            // is the race over?
+            foreach (var hound in raceHounds)
+            {
+                if (hound.Finished)
+                    finishedCounter++;
+
+                if (finishedCounter >= raceHounds.Length)
+                    going = false;
+
+            }
+
+
+            LogText.Dump("\n");
+            Console.WriteLine("Tick!");
             return going;
         }
     }
