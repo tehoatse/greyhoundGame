@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace greyhoundGame
 {
@@ -18,23 +19,47 @@ namespace greyhoundGame
             Console.WriteLine("Building dat greyhound!");
             Greyhound allEighties = new Greyhound();
             Greyhound allEighties2 = new Greyhound();
+            Greyhound handsome = new Greyhound();
+            Greyhound hanover = new Greyhound();
+            Greyhound butter = new Greyhound();
 
             // good old all eighties!
-            allEighties.Name = "All Eighties";
+            allEighties.Name = "Beef";
             allEighties.Age = 2;
             allEighties.Stats.Stamina.StatValue = 80;
             allEighties.Stats.TopSpeed.StatValue = 80;
             allEighties.Stats.Acceleration.StatValue = 80;
             allEighties.Stats.Tenacity.StatValue = 80;
 
-            allEighties2.Name = "All Eighties the Second";
+            allEighties2.Name = "Kevin the Dog";
             allEighties2.Age = 2;
             allEighties2.Stats.Stamina.StatValue = 80;
             allEighties2.Stats.TopSpeed.StatValue = 80;
             allEighties2.Stats.Acceleration.StatValue = 80;
             allEighties2.Stats.Tenacity.StatValue = 80;
 
-            Greyhound[] hounds = { allEighties, allEighties2 };
+            handsome.Name = "Handsome Stranger";
+            handsome.Age = 2;
+            handsome.Stats.Stamina.StatValue = 70;
+            handsome.Stats.TopSpeed.StatValue = 70;
+            handsome.Stats.Acceleration.StatValue = 70;
+            handsome.Stats.Tenacity.StatValue = 70;
+
+            hanover.Name = "Hanover";
+            hanover.Age = 2;
+            hanover.Stats.Stamina.StatValue = 70;
+            hanover.Stats.TopSpeed.StatValue = 70;
+            hanover.Stats.Acceleration.StatValue = 75;
+            hanover.Stats.Tenacity.StatValue = 60;
+
+            butter.Name = "Butter";
+            butter.Age = 2;
+            butter.Stats.Stamina.StatValue = 60;
+            butter.Stats.TopSpeed.StatValue = 60;
+            butter.Stats.Acceleration.StatValue = 60;
+            butter.Stats.Tenacity.StatValue = 60;
+
+            Greyhound[] hounds = { allEighties, allEighties2, handsome, hanover, butter };
 
             Race testRace = new Race(hounds);
             testRace.Start();
@@ -226,7 +251,44 @@ namespace greyhoundGame
 
     class Results
     {
-        // todo, class to hold results
+        // the greyhounds in the race
+        public Greyhound[] Form { get; set; }
+
+        private List<Finisher> finishers = new List<Finisher>();
+
+        public Results(Greyhound[] form)
+        {
+            Form = form;
+        }
+
+        public void AddFinisher(Greyhound hound, int time)
+        {
+            finishers.Add(new Finisher(hound, time));
+        }
+
+
+        
     }
 
+    
+    class Finisher
+    {
+        // basic class to hold finishing information for the results
+        public Greyhound Hound { get; private set; }
+        public int Time { get; private set; }
+        public int Position { get; set; }
+        public string PositionName { get; private set; }
+
+        public Finisher(Greyhound hound, int time)
+        {
+            Hound = hound;
+            Time = time;
+        }
+
+        public override string ToString()
+        {
+            return $"{Hound.Name} finished with a time of {Time}";
+        }
+
+    }
 }

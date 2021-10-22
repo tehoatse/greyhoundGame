@@ -26,5 +26,107 @@
         public static string AggressionDesc = "Will this greyhound start a fight?";
         public static string Fitness = "Fitness";
         public static string FitnessDesc = "How appropriate is this animal for its environment?";
+
+        // ordinal numbers
+        public static string First = "first";
+        public static string Second = "second";
+        public static string Third = "third";
+        public static string Fourth = "fourth";
+        public static string Fifth = "fifth";
+        public static string Sixth = "sixth";
+        public static string Seventh = "seventh";
+        public static string Eighth = "eighth";
+        public static string Ninth = "ninth";
+        public static string Tenth = "tenth";
+        public static string Eleventh = "eleventh";
+        public static string Twelfth = "twelfth";
+        public static string Thirteenth = "thirteenth";
+        public static string Forteenth = "forteenth";
+        public static string Fifteenth = "fifteenth";
+        public static string Sixteenth = "sixteenth";
+        public static string Seventeenth = "seventeenth";
+        public static string Eighteenth = "eighteenth";
+        public static string Nineteenth = "nineteenth";
+        public static string Twentieth = "twentieth";
+
+        public static string FirstNum = "1st";
+        public static string SecondNum = "2nd";
+        public static string ThirdNum = "3rd";
+        public static string FourthNum = "4th";
+        public static string FifthNum = "5th";
+        public static string SixthNum = "6th";
+        public static string SeventhNum = "7th";
+        public static string EighthNum = "8th";
+        public static string NinthNum = "9th";
+        public static string TenthNum = "10th";
+        public static string EleventhNum = "11th";
+        public static string TwelfthNum = "12th";
+        public static string ThirteenthNum = "13th";
+        public static string ForteenthNum = "14th";
+        public static string FifteenthNum = "15th";
+        public static string SixteenthNum = "16th";
+        public static string SeventeenthNum = "17th";
+        public static string EighteenthNum = "18th";
+        public static string NineteenthNum = "19th";
+        public static string TwentiethNum = "20th";
+
+        public static string[] OrdinalNames =
+        {
+            First,
+            Second,
+            Third,
+            Fourth,
+            Fifth,
+            Sixth,
+            Seventh,
+            Eighth,
+            Ninth,
+            Tenth,
+            Eleventh,
+            Twelfth,
+            Thirteenth,
+            Forteenth,
+            Fifteenth,
+            Sixteenth,
+            Seventeenth,
+            Eighteenth,
+            Nineteenth,
+            Twentieth
+        };
+
+        public static string[] OrdinalNum =
+        {
+            FirstNum,
+            SecondNum,
+            ThirdNum,
+            FourthNum,
+            FifthNum,
+            SixthNum,
+            SeventhNum,
+            EighthNum,
+            NinthNum,
+            TenthNum,
+            EleventhNum,
+            TwelfthNum,
+            ThirteenthNum,
+            ForteenthNum,
+            FifteenthNum,
+            SixteenthNum,
+            SeventeenthNum,
+            EighteenthNum,
+            NineteenthNum,
+            TwentiethNum
+        };
+
+        public static string GetOrdinalName(int i)
+        {
+            return OrdinalNames[i];
+        }
+
+        public static string GetOrdinalNum(int i)
+        {
+            return OrdinalNum[i];
+        }
+
     }
 }

@@ -13,6 +13,9 @@ namespace greyhoundGame
 
         private RaceGreyhound[] raceHounds;
 
+        // how many ticks have gone
+        private int timePassed = 0;
+
         public Race(Greyhound[] greyhounds)
         {
             Greyhounds = greyhounds;
@@ -32,7 +35,7 @@ namespace greyhoundGame
             Distance = distance;
         }
 
-        public void Start()
+        public Results Start()
         {
             /*
              * so the way this is to work when we his 'start' a race starts
@@ -46,16 +49,20 @@ namespace greyhoundGame
              */
 
             bool raceGoing = true;
+            var results = new Results(Greyhounds);
+
 
             while(raceGoing)
             {
-                raceGoing = Tick();
+                raceGoing = Tick(results);
             }
-           
+
+            return results;
         }
 
-        private bool Tick()
+        private bool Tick(Results results)
         {
+            timePassed++; // how long has the race been going?!
             bool going = true;
             int finishedCounter = 0;
 
@@ -113,7 +120,6 @@ namespace greyhoundGame
                     going = false;
 
             }
-
 
             LogText.Dump("\n");
             Console.WriteLine("Tick!");
