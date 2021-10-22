@@ -49,7 +49,7 @@ namespace greyhoundGame
              */
 
             bool raceGoing = true;
-            var results = new Results(Greyhounds);
+            var results = new Results();
 
 
             while(raceGoing)
@@ -93,10 +93,18 @@ namespace greyhoundGame
                     if (hound.DistanceTravelled <= Distance)
                         hound.DistanceTravelled += hound.CurrentSpeed / 5;
                     else // you got there!!!!
+                    {
+                        // this isn't being reached, figure out why when I got brain!
                         hound.Finished = true;
+                        
+                    }
 
                     if (hound.DistanceTravelled >= Distance)
+                    {
                         hound.Finished = true;
+                        results.AddFinisher(hound, timePassed);
+                        LogText.Dump("Finisher added!\n");
+                    }
 
                     // we're gunna build the log string here
                     string outString = 

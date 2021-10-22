@@ -45,7 +45,7 @@ namespace greyhoundGame
             handsome.Stats.Acceleration.StatValue = 70;
             handsome.Stats.Tenacity.StatValue = 70;
 
-            hanover.Name = "Hanover";
+            hanover.Name = "Gargano";
             hanover.Age = 2;
             hanover.Stats.Stamina.StatValue = 70;
             hanover.Stats.TopSpeed.StatValue = 70;
@@ -62,7 +62,8 @@ namespace greyhoundGame
             Greyhound[] hounds = { allEighties, allEighties2, handsome, hanover, butter };
 
             Race testRace = new Race(hounds);
-            testRace.Start();
+            var results = testRace.Start();
+            LogText.Dump(results.ToString());
         }
     }
     public class Mutator
@@ -152,120 +153,35 @@ namespace greyhoundGame
             return $"{Name}: {StatValue} - {Description}\n";
         }
     }
-
-    class StatList
+    class Results
     {
-        // this is a list of statistics that all greyhounds have, valued from 1 to 120
+        // the greyhounds in the race
+        public RaceGreyhound[] Form { get; set; } // not used?
 
-        public Stat TopSpeed { get; set; }
-        public Stat Stamina { get; set; }
-        public Stat Acceleration { get; set; }
-        public Stat Health { get; set; }
-        public Stat Armor { get; set; }
-        public Stat Confidence { get; set; }
-        public Stat Tenacity { get; set; }
-        public Stat Balance { get; set; }
-        public Stat Agility { get; set; }
-        public Stat Strength { get; set; }
-        public Stat Aggression { get; set; }
-        public Stat Fitness { get; set; }
+        private List<Finisher> finishers = new List<Finisher>();
 
-
-        // creates a set of stats defaulting to 1
-        public StatList()
+        public Results()
         {
-            CreateStats();
+            // it's empty!
         }
 
-        public StatList(int[] stats)
+        public void AddFinisher(RaceGreyhound hound, int time)
         {
-            CreateStats(stats);
-        }
-
-        // returns a list of all the statistics on this list
-        public Stat[] ListStats()
-        {
-            Stat[] returnList = {
-                TopSpeed,
-                Stamina,
-                Acceleration,
-                Health,
-                Armor,
-                Confidence,
-                Tenacity,
-                Balance,
-                Agility,
-                Strength,
-                Aggression,
-                Fitness
-            };
-
-            Console.WriteLine(returnList.Length);
-            return returnList;
-        }
-
-        // the contructors use this to CreateStats()
-        private void CreateStats()
-        {
-            TopSpeed = new Stat(GreyhoundStrings.TopSpeed, GreyhoundStrings.TopSpeedDesc);
-            Stamina = new Stat(GreyhoundStrings.Stamina, GreyhoundStrings.StaminaDesc);
-            Acceleration = new Stat(GreyhoundStrings.Accelertion, GreyhoundStrings.AccelerationDesc);
-            Health = new Stat(GreyhoundStrings.Health, GreyhoundStrings.HealthDesc);
-            Armor = new Stat(GreyhoundStrings.Armor, GreyhoundStrings.ArmorDesc);
-            Confidence = new Stat(GreyhoundStrings.Confidence, GreyhoundStrings.ConfidenceDesc);
-            Tenacity = new Stat(GreyhoundStrings.Tenacity, GreyhoundStrings.TenacityDesc);
-            Balance = new Stat(GreyhoundStrings.Balance, GreyhoundStrings.BalanceDesc);
-            Agility = new Stat(GreyhoundStrings.Agility, GreyhoundStrings.AgilityDesc);
-            Strength = new Stat(GreyhoundStrings.Strength, GreyhoundStrings.StrengthDesc);
-            Aggression = new Stat(GreyhoundStrings.Aggression, GreyhoundStrings.AggressionDesc);
-            Fitness = new Stat(GreyhoundStrings.Fitness, GreyhoundStrings.FitnessDesc);
-
-        }
-
-        private void CreateStats(int[] stats)
-        {
-            CreateStats();
-            var list = ListStats();
-
-            // assigning stats
-            for (int i = 0; i < list.Length; i++)
-            {
-                //Console.WriteLine(i);
-                list[i].StatValue = stats[i];
-            }
+            finishers.Add(new Finisher(hound, time));
+            finishers[finishers.Count-1].Position = finishers.Count-1; // this is stupid
         }
 
         public override string ToString()
         {
-            string outString = "";
-            // get the ToStrings() from the stats
-            Stat[] stats = ListStats();
+            string outString = "And the positions are decided!\n";
 
-            foreach (Stat stat in stats)
+            foreach (var finisher in finishers)
             {
-                outString += stat.ToString();
+                outString += finisher.PositionName + "! ";
+                outString += finisher.ToString() + "\n";
             }
             return outString;
         }
-    }
-
-    class Results
-    {
-        // the greyhounds in the race
-        public Greyhound[] Form { get; set; }
-
-        private List<Finisher> finishers = new List<Finisher>();
-
-        public Results(Greyhound[] form)
-        {
-            Form = form;
-        }
-
-        public void AddFinisher(Greyhound hound, int time)
-        {
-            finishers.Add(new Finisher(hound, time));
-        }
-
     }
 
     
@@ -274,7 +190,7 @@ namespace greyhoundGame
         // basic class to hold finishing information for the results
 
         private int _position;
-        public Greyhound Hound { get; private set; }
+        public RaceGreyhound Hound { get; private set; }
         public int Time { get; private set; }
         public int Position { 
             get => _position;
@@ -286,7 +202,7 @@ namespace greyhoundGame
         }
         public string PositionName { get; private set; }
 
-        public Finisher(Greyhound hound, int time)
+        public Finisher(RaceGreyhound hound, int time)
         {
             Hound = hound;
             Time = time;
@@ -294,7 +210,7 @@ namespace greyhoundGame
 
         public override string ToString()
         {
-            return $"{Hound.Name} finished with a time of {Time}";
+            return $"{Hound.Greyhound.Name} finished with a time of {Time}";
         }
 
     }
