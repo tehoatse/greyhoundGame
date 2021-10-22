@@ -1,4 +1,6 @@
-﻿namespace greyhoundGame
+﻿using System;
+
+namespace greyhoundGame
 {
     class Race
     {
@@ -30,7 +32,7 @@
             Distance = distance;
         }
 
-        public Results Start()
+        public void Start()
         {
             /*
              * so the way this is to work when we his 'start' a race starts
@@ -49,14 +51,12 @@
             {
                 raceGoing = Tick();
             }
-            
-            var results = new Results();
-            return results;
+           
         }
 
         private bool Tick()
         {
-            bool raceGoing = true;
+            bool going = true;
             int finishedCounter = 0;
 
             // looks like this is where the race logic will live
@@ -88,17 +88,31 @@
                     else // you got there!!!!
                         hound.Finished = true;
 
+                    if (hound.DistanceTravelled >= Distance)
+                        hound.Finished = true;
+
+
                     if (hound.Finished)
                         finishedCounter++;
 
-                    raceGoing = finishedCounter == raceHounds.Length;
+                    if (finishedCounter == raceHounds.Length)
+                        going = false;
+
+                    // we're gunna build the log string here
+                    string outString = 
+                        $"Name: {hound.Greyhound.Name} " +
+                        $"Speed: {hound.CurrentSpeed} " +
+                        $"Stam: {hound.CurrentStam} " +
+                        $"Distance gone: {hound.DistanceTravelled} " +
+                        $"Finished?: {hound.Finished}\n";
+
+                    LogText.Dump(outString);
+
+                    Console.WriteLine("tick!");
+
                 }
             }
-
-            return raceGoing;
+            return going;
         }
-
-
     }
-
 }

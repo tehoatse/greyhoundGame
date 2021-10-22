@@ -1,19 +1,37 @@
 ﻿using System;
+using System.IO;
 
 namespace greyhoundGame
 {
+    class LogText
+    {
+        public static void Dump(string outDump)
+        {
+            File.AppendAllText("greyhoundlog.txt", outDump);
+        }
+    }
     class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Let's build us a baby greyhound!");
+            Console.WriteLine("We're gunna make a greyhound with all 80s!");
             Console.WriteLine("Building dat greyhound!");
-            Greyhound baby = new Greyhound();
-            Console.WriteLine(baby.ToString());
+            Greyhound allEighties = new Greyhound();
+
+            // good old all eighties!
+            allEighties.Name = "All Eighties";
+            allEighties.Age = 2;
+            allEighties.Stats.Stamina.StatValue = 80;
+            allEighties.Stats.TopSpeed.StatValue = 80;
+            allEighties.Stats.Acceleration.StatValue = 80;
+            allEighties.Stats.Tenacity.StatValue = 80;
+
+            Greyhound[] hounds = { allEighties };
+
+            Race testRace = new Race(hounds);
+            testRace.Start();
         }
     }
-
-    #region TODO
     public class Mutator
     {
         // everything that can affect a greyhound needs to be a mutator
@@ -43,35 +61,6 @@ namespace greyhoundGame
     public class Weight : Mutator
     {
         // a greyhound has a weight
-    }
-    #endregion
-
-    class Greyhound
-    {
-        // a greyhound has statistics
-        public StatList Stats { get; set; }
-        // a greyhound has a name
-        public string Name { get; set; }
-        public int Age { get; set; }
-        
-        public Greyhound()
-        {
-            // a baby greyhound
-            Stats = new StatList();
-            Name = "Baby Greyhound";
-            Age = 0;
-        }
-
-        public override string ToString()
-        {
-            string outString = "";
-
-            outString += $"Name: {Name}\n";
-            outString += $"Age: {Age}\n";
-            outString += Stats.ToString();
-
-            return outString;
-        }
     }
 
     class Stat
