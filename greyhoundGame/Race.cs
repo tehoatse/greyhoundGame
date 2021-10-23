@@ -18,20 +18,14 @@ namespace greyhoundGame
 
         public Race(Greyhound[] greyhounds)
         {
-            Greyhounds = greyhounds;
+            AddHounds(greyhounds);
             Distance = 500;
-            raceHounds = new RaceGreyhound[greyhounds.Length];
 
-            // so we're putting them all in the race, registering them basically and salting them at the same time
-            for (int i = 0; i < Greyhounds.Length; i++)
-            {
-                raceHounds[i] = new RaceGreyhound(Greyhounds[i]);
-            }
         }
 
         public Race(Greyhound[] greyhounds, int distance )
         {
-            Greyhounds = greyhounds;
+            AddHounds(greyhounds);
             Distance = distance;
         }
 
@@ -58,6 +52,19 @@ namespace greyhoundGame
             }
 
             return results;
+        }
+
+        private void AddHounds(Greyhound[] hounds)
+        {
+            Greyhounds = hounds;
+            raceHounds = new RaceGreyhound[hounds.Length];
+
+            // so we're putting them all in the race, registering them basically and salting them at the same time
+            for (int i = 0; i < Greyhounds.Length; i++)
+            {
+                raceHounds[i] = new RaceGreyhound(Greyhounds[i]);
+            }
+
         }
 
         private bool Tick(Results results)
