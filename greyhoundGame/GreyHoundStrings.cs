@@ -118,16 +118,45 @@
             TwentiethNum
         };
 
+        // this one only goes up to 20
         public static string GetOrdinalName(int i)
         {
+            // if it's too big just give then Twentieth
+            if (i > 20)
+                return OrdinalNames[OrdinalNames.Length-1];
             // send an int, get back the ordinal name 'first' etc
             return OrdinalNames[i-1];
         }
-
+        
+        //
         public static string GetOrdinalNum(int i)
         {
+
+            // special cases
+            if (i < 1)
+                return OrdinalNum[0];
+
+            if (i <= 20)
+                return OrdinalNum[i - 1];
+
             // send an int, get back the ordinal abbreviation '1st' etc
-            return OrdinalNum[i-1];
+            string textVersion = i.ToString();
+            string endText = textVersion.Substring(textVersion.Length - 2, 2); // I think this gets the final two characters? I'll TEST
+            
+
+            // converting the last two characters to numbers so we can operate on them
+            int lastTwoNum = int.Parse(endText);
+            int lastNum = int.Parse(endText.Substring(endText.Length - 1, 1));
+
+            // I think that fixes the problem
+            if (lastNum == 0)
+                return textVersion + "th";
+            
+            // if the last two digits are between 10 and 20 they're special 
+            if(lastTwoNum >= 10 && lastTwoNum <= 20)
+                return textVersion.Remove(textVersion.Length - 2) + textVersion + OrdinalNum[lastTwoNum - 2];
+
+            return textVersion.Remove(textVersion.Length - 1) + OrdinalNum[lastNum - 1];
         }
 
     }
