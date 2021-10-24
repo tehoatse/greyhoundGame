@@ -131,6 +131,7 @@
         //
         public static string GetOrdinalNum(int i)
         {
+            // todo: put commas in appropriate places in return strings
 
             // special cases
             if (i < 1)

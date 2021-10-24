@@ -12,7 +12,7 @@
             set
             {
                 _position = value;
-                PositionName = GreyhoundStrings.GetOrdinalName(value);
+                PositionName = GreyhoundStrings.GetOrdinalNum(value);
             } 
         }
         public string PositionName { get; private set; }
@@ -21,6 +21,7 @@
         {
             Hound = hound;
             Time = time;
+            Position = 1; // needs a position for things to work
         }
 
         public override string ToString()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace greyhoundGame
 {
@@ -51,6 +52,7 @@ namespace greyhoundGame
                 raceGoing = Tick(results);
             }
 
+            results.RaceDone();
             return results;
         }
 
@@ -62,7 +64,7 @@ namespace greyhoundGame
             // so we're putting them all in the race, registering them basically and salting them at the same time
             for (int i = 0; i < Greyhounds.Length; i++)
             {
-                raceHounds[i] = new RaceGreyhound(Greyhounds[i]);
+                raceHounds[i] = new RaceGreyhound(Greyhounds[i], Distance);
             }
 
         }
@@ -121,7 +123,8 @@ namespace greyhoundGame
                         $"Distance gone: {hound.DistanceTravelled} " +
                         $"Finished?: {hound.Finished}\n";
 
-                    LogText.Dump(outString);
+                    // text file is dumping just results here ! :DDD
+                    resultsDump(outString);
                 }
             }
 
@@ -140,5 +143,12 @@ namespace greyhoundGame
             Console.WriteLine("Tick!");
             return going;
         }
+
+        private void resultsDump(string dump)
+        {
+            File.AppendAllText("results.txt", dump);
+        }
     }
+
+
 }

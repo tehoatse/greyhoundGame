@@ -6,25 +6,25 @@ namespace greyhoundGame
     {
         // we're using this class to describe a greyhound on raceday so we're not altering its stats on the day
         // I guess we're using this to add a bunch of data to greyhound
-        public Greyhound Greyhound { get; }
+        public Greyhound Greyhound { get; private set; }
         public int CurrentSpeed { get; set; }
         public int CurrentStam { get; set; }
         public int SaltedTopSpeed { get; private set; }
         public int SaltedTenacity { get; private set; }
         public int SaltedAcceleration { get; private set; }
         public int DistanceTravelled { get; set; }
+        public int RaceLength { get; set; }
         public bool Finished { get; set; }
 
         public RaceGreyhound(Greyhound hound)
         {
-            Greyhound = hound;
-            CurrentSpeed = 0;
-            DistanceTravelled = 0;
-            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt()) * 3;
-            SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
-            SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
-            SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
-            Finished = false;
+            BuildHound(hound);
+        }
+
+        public RaceGreyhound(Greyhound hound, int raceLength)
+        {
+            BuildHound(hound);
+            RaceLength = raceLength;
         }
 
         // generating a modifier to make thing random
@@ -49,6 +49,19 @@ namespace greyhoundGame
             if (result <= 97)
                 return 10;
             return 20; // aaaaawesome!
+        }
+
+        private void BuildHound(Greyhound hound)
+        {
+            Greyhound = hound;
+            CurrentSpeed = 0;
+            DistanceTravelled = 0;
+            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt()) * 3;
+            SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
+            SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
+            SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
+            Finished = false;
+            RaceLength = 500;
         }
     }
 

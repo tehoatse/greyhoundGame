@@ -60,7 +60,7 @@ namespace greyhoundGame
 
             Greyhound[] hounds = { allEighties, allEighties2, handsome, hanover, butter };
 
-            /* blocking this out to test other stuff
+            
             Race testRace = new Race(hounds);
             Race secondRace = new Race(hounds, 250);
             Race thirdRace = new Race(hounds, 1000);
@@ -71,15 +71,7 @@ namespace greyhoundGame
             LogText.Dump(results.ToString());
             results = thirdRace.Start();
             LogText.Dump(results.ToString());
-            */
-
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(24));
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(101));
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(1));
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(22));
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(11));
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(2222));
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(40));
+            
 
         }
     }
