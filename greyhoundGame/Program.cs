@@ -72,7 +72,6 @@ namespace greyhoundGame
             results = thirdRace.Start();
             LogText.Dump(results.ToString());
             
-
         }
     }
     public class Mutator

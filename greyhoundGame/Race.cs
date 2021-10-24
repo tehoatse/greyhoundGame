@@ -124,6 +124,7 @@ namespace greyhoundGame
                         $"Finished?: {hound.Finished}\n";
 
                     // text file is dumping just results here ! :DDD
+                    LogText.Dump(outString);
                     resultsDump(outString);
                 }
             }

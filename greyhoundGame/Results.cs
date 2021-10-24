@@ -30,6 +30,8 @@ namespace greyhoundGame
             // this is called after the race is done to figure out who finished where
             // probably don't need the 'finisher' class can probably just put that into RaceGreyHound
 
+            // need to st
+
             for (int i = 0; i < finishers.Count; i++)
             {
                 // going to use 'i' to allocate position
