@@ -154,7 +154,6 @@
 
             string endText = textVersion.Substring(textVersion.Length - 2, 2); // I think this gets the final two characters? I'll TEST
            
-
             // converting the last two characters to numbers so we can operate on them
             int lastTwoNum = int.Parse(endText);
             int lastNum = int.Parse(endText.Substring(endText.Length - 1, 1));
