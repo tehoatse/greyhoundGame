@@ -132,6 +132,12 @@
         public static string GetOrdinalNum(int i)
         {
             // todo: put commas in appropriate places in return strings
+            // so 2,000,000,000
+            // I don't even know what that is
+            // anyway...
+            //
+
+
 
             // special cases
             if (i < 1)
