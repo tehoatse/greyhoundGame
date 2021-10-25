@@ -148,6 +148,18 @@
 
             // send an int, get back the ordinal abbreviation '1st' etc
             string textVersion = i.ToString();
+
+            // putting commas in the resulting string
+            int thirdCounter = 1;
+
+            for (int counter = textVersion.Length - 1; counter > 0; counter--)
+            {
+                if (thirdCounter % 3 == 0)
+                    textVersion = textVersion.Insert(counter, ",");
+                thirdCounter++;
+            }
+
+
             string endText = textVersion.Substring(textVersion.Length - 2, 2); // I think this gets the final two characters? I'll TEST
             
 
