@@ -131,13 +131,6 @@
         //
         public static string GetOrdinalNum(int i)
         {
-            // todo: put commas in appropriate places in return strings
-            // so 2,000,000,000
-            // I don't even know what that is
-            // anyway...
-            //
-
-
 
             // special cases
             if (i < 1)
@@ -159,9 +152,8 @@
                 thirdCounter++;
             }
 
-
             string endText = textVersion.Substring(textVersion.Length - 2, 2); // I think this gets the final two characters? I'll TEST
-            
+           
 
             // converting the last two characters to numbers so we can operate on them
             int lastTwoNum = int.Parse(endText);
