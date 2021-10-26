@@ -72,7 +72,7 @@ namespace greyhoundGame
             results = thirdRace.Start();
             LogText.Dump(results.ToString());
 
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNum(10000000));
+            Console.WriteLine(GreyhoundStrings.GetOrdinalNumber(10000000));
             
         }
     }

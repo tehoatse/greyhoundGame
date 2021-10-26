@@ -2,7 +2,6 @@
 {
     class Finisher
     {
-        // basic class to hold finishing information for the results
 
         private int _position;
         public RaceGreyhound Hound { get; private set; }
@@ -12,7 +11,7 @@
             set
             {
                 _position = value;
-                PositionName = GreyhoundStrings.GetOrdinalNum(value);
+                PositionName = GreyhoundStrings.GetOrdinalNumber(value);
             } 
         }
         public string PositionName { get; private set; }
@@ -21,7 +20,7 @@
         {
             Hound = hound;
             Time = time;
-            Position = 1; // needs a position for things to work
+            Position = -1; 
         }
 
         public override string ToString()

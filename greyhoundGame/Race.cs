@@ -5,6 +5,10 @@ namespace greyhoundGame
 {
     class Race
     {
+        private const int defaultRace = 500;
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+
         // greyhounds run a race, lets see who's the fastest!
         // the greyhounds in the race
         public Greyhound[] Greyhounds { get; private set; }
@@ -20,8 +24,7 @@ namespace greyhoundGame
         public Race(Greyhound[] greyhounds)
         {
             AddHounds(greyhounds);
-            Distance = 500;
-
+            Distance = defaultRace;
         }
 
         public Race(Greyhound[] greyhounds, int distance )
@@ -52,7 +55,7 @@ namespace greyhoundGame
                 raceGoing = Tick(results);
             }
 
-            results.RaceDone();
+            results.GiveHoundsPositions();
             return results;
         }
 
@@ -62,16 +65,16 @@ namespace greyhoundGame
             raceHounds = new RaceGreyhound[hounds.Length];
 
             // so we're putting them all in the race, registering them basically and salting them at the same time
-            for (int i = 0; i < Greyhounds.Length; i++)
+            for (int adder = 0; adder < Greyhounds.Length; adder++)
             {
-                raceHounds[i] = new RaceGreyhound(Greyhounds[i], Distance);
+                raceHounds[adder] = new RaceGreyhound(Greyhounds[adder], Distance);
             }
 
         }
 
         private bool Tick(Results results)
         {
-            timePassed++; // how long has the race been going?!
+            timePassed++;
             bool going = true;
             int finishedCounter = 0;
 
@@ -80,40 +83,12 @@ namespace greyhoundGame
 
             foreach (var hound in raceHounds)
             {
-                // if it's not finished then move it
                 if (!hound.Finished)
                 {
-                    // hound not at top speed? increase top speed!
-                    if (hound.CurrentSpeed < hound.SaltedTopSpeed && hound.CurrentStam != 0)
-                        hound.CurrentSpeed += hound.SaltedAcceleration / 5;
-
-                    // if it's not out of gas, use up a bit, if it is reduce its speed
-                    if (hound.CurrentStam != 0)
-                        hound.CurrentStam--;
-                    else // higher tenacity is good, we need to invert the result
-                        hound.CurrentSpeed -= (125 - hound.SaltedTenacity) / 5;
-
-                    // can't have them stalling on the track
-                    // this makes the hound minimum speed 5
-                    if (hound.CurrentSpeed < 5)
-                        hound.CurrentSpeed = 5;
-
-                    // move a bit
-                    if (hound.DistanceTravelled <= Distance)
-                        hound.DistanceTravelled += hound.CurrentSpeed / 5;
-                    else // you got there!!!!
-                    {
-                        // this isn't being reached, figure out why when I got brain!
-                        hound.Finished = true;
-                        
-                    }
-
-                    if (hound.DistanceTravelled >= Distance)
-                    {
-                        hound.Finished = true;
-                        results.AddFinisher(hound, timePassed);
-                        LogText.Dump("Finisher added!\n");
-                    }
+                    Accelerate(hound);
+                    Tire(hound);
+                    Move(hound);
+                    CheckFinishLine(hound, results);
 
                     // we're gunna build the log string here
                     string outString = 
@@ -125,7 +100,7 @@ namespace greyhoundGame
 
                     // text file is dumping just results here ! :DDD
                     LogText.Dump(outString);
-                    resultsDump(outString);
+                    ResultsDump(outString);
                 }
             }
 
@@ -145,7 +120,45 @@ namespace greyhoundGame
             return going;
         }
 
-        private void resultsDump(string dump)
+        private void Accelerate(RaceGreyhound hound)
+        {
+            if (hound.CurrentSpeed < hound.SaltedTopSpeed &&
+                hound.CurrentStam != 0)
+            {
+                hound.CurrentSpeed += hound.SaltedAcceleration / statDivisor;
+            }
+        }
+
+        private void Tire(RaceGreyhound hound)
+        {
+            if (!hound.Finished &&
+                hound.CurrentStam != 0)
+                hound.CurrentStam--;
+            else // higher tenacity is good, we need to invert the result
+            {
+                hound.CurrentSpeed -= (tenacityOffset - hound.SaltedTenacity) / statDivisor;
+                if (hound.CurrentSpeed < 5)
+                    hound.CurrentSpeed = 5;
+            }
+        }
+
+        private void CheckFinishLine(RaceGreyhound hound, Results results)
+        {
+            if (hound.DistanceTravelled >= Distance)
+            {
+                hound.Finished = true;
+                results.AddFinisher(hound, timePassed);
+                LogText.Dump("Finisher added!\n");
+            }
+        }
+
+        private void Move(RaceGreyhound hound)
+        {
+            if (hound.DistanceTravelled <= Distance)
+                hound.DistanceTravelled += hound.CurrentSpeed / statDivisor;
+        }
+
+        private void ResultsDump(string dump)
         {
             File.AppendAllText("results.txt", dump);
         }

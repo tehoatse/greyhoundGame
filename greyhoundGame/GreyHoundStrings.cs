@@ -28,49 +28,49 @@
         public static string FitnessDesc = "How appropriate is this animal for its environment?";
 
         // ordinal numbers
-        public static string First = "first";
-        public static string Second = "second";
-        public static string Third = "third";
-        public static string Fourth = "fourth";
-        public static string Fifth = "fifth";
-        public static string Sixth = "sixth";
-        public static string Seventh = "seventh";
-        public static string Eighth = "eighth";
-        public static string Ninth = "ninth";
-        public static string Tenth = "tenth";
-        public static string Eleventh = "eleventh";
-        public static string Twelfth = "twelfth";
-        public static string Thirteenth = "thirteenth";
-        public static string Forteenth = "forteenth";
-        public static string Fifteenth = "fifteenth";
-        public static string Sixteenth = "sixteenth";
-        public static string Seventeenth = "seventeenth";
-        public static string Eighteenth = "eighteenth";
-        public static string Nineteenth = "nineteenth";
-        public static string Twentieth = "twentieth";
+        private static string First = "first";
+        private static string Second = "second";
+        private static string Third = "third";
+        private static string Fourth = "fourth";
+        private static string Fifth = "fifth";
+        private static string Sixth = "sixth";
+        private static string Seventh = "seventh";
+        private static string Eighth = "eighth";
+        private static string Ninth = "ninth";
+        private static string Tenth = "tenth";
+        private static string Eleventh = "eleventh";
+        private static string Twelfth = "twelfth";
+        private static string Thirteenth = "thirteenth";
+        private static string Forteenth = "forteenth";
+        private static string Fifteenth = "fifteenth";
+        private static string Sixteenth = "sixteenth";
+        private static string Seventeenth = "seventeenth";
+        private static string Eighteenth = "eighteenth";
+        private static string Nineteenth = "nineteenth";
+        private static string Twentieth = "twentieth";
 
-        public static string FirstNum = "1st";
-        public static string SecondNum = "2nd";
-        public static string ThirdNum = "3rd";
-        public static string FourthNum = "4th";
-        public static string FifthNum = "5th";
-        public static string SixthNum = "6th";
-        public static string SeventhNum = "7th";
-        public static string EighthNum = "8th";
-        public static string NinthNum = "9th";
-        public static string TenthNum = "10th";
-        public static string EleventhNum = "11th";
-        public static string TwelfthNum = "12th";
-        public static string ThirteenthNum = "13th";
-        public static string ForteenthNum = "14th";
-        public static string FifteenthNum = "15th";
-        public static string SixteenthNum = "16th";
-        public static string SeventeenthNum = "17th";
-        public static string EighteenthNum = "18th";
-        public static string NineteenthNum = "19th";
-        public static string TwentiethNum = "20th";
+        private static string FirstNum = "1st";
+        private static string SecondNum = "2nd";
+        private static string ThirdNum = "3rd";
+        private static string FourthNum = "4th";
+        private static string FifthNum = "5th";
+        private static string SixthNum = "6th";
+        private static string SeventhNum = "7th";
+        private static string EighthNum = "8th";
+        private static string NinthNum = "9th";
+        private static string TenthNum = "10th";
+        private static string EleventhNum = "11th";
+        private static string TwelfthNum = "12th";
+        private static string ThirteenthNum = "13th";
+        private static string ForteenthNum = "14th";
+        private static string FifteenthNum = "15th";
+        private static string SixteenthNum = "16th";
+        private static string SeventeenthNum = "17th";
+        private static string EighteenthNum = "18th";
+        private static string NineteenthNum = "19th";
+        private static string TwentiethNum = "20th";
 
-        public static string[] OrdinalNames =
+        private static string[] OrdinalNames =
         {
             First,
             Second,
@@ -94,7 +94,7 @@
             Twentieth
         };
 
-        public static string[] OrdinalNum =
+        private static string[] OrdinalNum =
         {
             FirstNum,
             SecondNum,
@@ -128,49 +128,69 @@
             return OrdinalNames[i-1];
         }
         
-        //
-        public static string GetOrdinalNum(int i)
+        public static string GetOrdinalNumber(int ordinalNumber)
         {
-            // todo: put commas in appropriate places in return strings
-
             // special cases
-            if (i < 1)
+            if (ordinalNumber < 1)
                 return OrdinalNum[0];
 
-            if (i <= 20)
-                return OrdinalNum[i - 1];
+            if (ordinalNumber <= 20)
+                return OrdinalNum[ordinalNumber - 1];
 
-            // send an int, get back the ordinal abbreviation '1st' etc
-            string textVersion = i.ToString();
-
-            // putting commas in the resulting string
-            int thirdCounter = 1;
-
-            for (int counter = textVersion.Length - 1; counter > 0; counter--)
-            {
-                if (thirdCounter % 3 == 0)
-                    textVersion = textVersion.Insert(counter, ",");
-                thirdCounter++;
-            }
-
-
-            string endText = textVersion.Substring(textVersion.Length - 2, 2); // I think this gets the final two characters? I'll TEST
-            
+            string textVersion = InsertSeparator(ordinalNumber.ToString());
 
             // converting the last two characters to numbers so we can operate on them
-            int lastTwoNum = int.Parse(endText);
-            int lastNum = int.Parse(endText.Substring(endText.Length - 1, 1));
+            int lastTwoNumerals = int.Parse(textVersion.Substring(textVersion.Length - 2, 2));
+            int lastNumeral = int.Parse(textVersion.Substring(textVersion.Length - 1, 1));
 
             // I think that fixes the problem
-            if (lastNum == 0)
+            if (lastNumeral == 0)
                 return textVersion + "th";
             
             // if the last two digits are between 10 and 20 they're special 
-            if(lastTwoNum >= 10 && lastTwoNum <= 20)
-                return textVersion.Remove(textVersion.Length - 2) + textVersion + OrdinalNum[lastTwoNum - 2];
+            if(lastTwoNumerals >= 10 && lastTwoNumerals <= 20)
+                return textVersion.Remove(textVersion.Length - 2) + textVersion + OrdinalNum[lastTwoNumerals - 2];
 
-            return textVersion.Remove(textVersion.Length - 1) + OrdinalNum[lastNum - 1];
+            return textVersion.Remove(textVersion.Length - 1) + OrdinalNum[lastNumeral- 1];
         }
+
+        public static string InsertSeparator(string subject)
+        {
+            subject = InsertSeparator(subject, ',', 3);
+            return subject;
+        }
+
+        public static string InsertSeparator(string subject, char separator)
+        {
+            subject = InsertSeparator(subject, separator, 3);
+            return subject;
+        }
+
+        public static string InsertSeparator(string subject, string separator)
+        {
+            subject = InsertSeparator(subject, separator, 3);
+            return subject;
+        }
+
+        public static string InsertSeparator(string subject, char separator, int spaces)
+        {
+            subject = InsertSeparator(subject, separator.ToString(), spaces);
+            return subject;
+        }
+
+        public static string InsertSeparator(string subject, string separator, int spaces)
+        {
+            int separatorCounter = 1;
+
+            for (int counter = subject.Length - 1; counter > 0; counter--)
+            {
+                if (separatorCounter % spaces == 0)
+                    subject = subject.Insert(counter, separator);
+                separatorCounter++;
+            }
+            return subject;
+        }
+
 
     }
 }

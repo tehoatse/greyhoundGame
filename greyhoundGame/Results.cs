@@ -5,12 +5,6 @@ namespace greyhoundGame
 {
     class Results
     {
-        // the greyhounds in the race
-        // I'll need to put the finishers together and poll them
-        // first across the line wins
-        // if we have two cross the line at the same time then the closest to the line previous tick wins
-        // if it's a draw they're both that position and the next position is discarded (1, 2, 2, 4, 5)
-        // first I need that text file
         public RaceGreyhound[] Form { get; set; } // not used?
 
         private List<Finisher> finishers = new List<Finisher>();
@@ -25,58 +19,31 @@ namespace greyhoundGame
             finishers.Add(new Finisher(hound, time));
         }
 
-        public void RaceDone()
+        public void GiveHoundsPositions()
         {
-            // this is called after the race is done to figure out who finished where
-            // probably don't need the 'finisher' class can probably just put that into RaceGreyHound
-
-            // need to st
-
-            for (int i = 0; i < finishers.Count; i++)
+            Finisher finalDog = finishers[finishers.Count -1];
+            for (int dogCounter = 0;
+                dogCounter <= finishers.Count;
+                dogCounter++)
             {
-                // going to use 'i' to allocate position
-                
-                // don't want to have the final doggie break things
-                if(i < finishers.Count-1)
+                int finishingPosition = dogCounter + 1;
+                Finisher currentHound = finishers[dogCounter];
+                currentHound.Position = finishingPosition;
+
+                if (currentHound == finalDog)
+                    return;
+
+                Finisher nextHound = finishers[dogCounter + 1];
+
+                while(areDogsTied(currentHound, nextHound))
                 {
-                    // so if this doggie and the next doggie have the same time
-                    if(finishers[i].Time == finishers[i + 1].Time)
-                    {
-                        // we have to check which doggie was closest to the finish last turn
-                        // if both crossed at the same time: 
-                        if (finishers[i].Hound.DistanceTravelled == finishers[i + 1].Hound.DistanceTravelled)
-                        {
-                            finishers[i].Position = i + 1;
-                            finishers[i + 1].Position = i + 1;
-                            i++; // incrementing i so the i+1 doggie is skipped, we already know where he landed
-                        }
-                        else if (finishers[i].Hound.DistanceTravelled > finishers[i + 1].Hound.DistanceTravelled)
-                        {
-                            finishers[i].Position = i + 1; // this doggie is further up
-                            finishers[i + 1].Position= i + 2;
-                            i++;
-                        }
-                        else
-                        {
-                            finishers[i].Position = i + 2;
-                            finishers[i].Position = i + 1;
-                            i++;
-                        }
-
-                    }
-                    else
-                    {
-                        finishers[i].Position = i + 1;
-                    }
-
-                }
-
-                else 
-                {
-                    finishers[i].Position = i + 1;
+                    nextHound.Position = finishingPosition;
+                    dogCounter++;
+                    if (nextHound == finalDog)
+                        return;
+                    nextHound = finishers[dogCounter + 1];
                 }
             }
-
         }
 
         public override string ToString()
@@ -89,6 +56,15 @@ namespace greyhoundGame
                 outString += finisher.ToString() + "\n";
             }
             return outString;
+        }
+
+        private bool areDogsTied(Finisher currentHound, Finisher nextHound)
+        {
+            if (currentHound.Time == nextHound.Time &&
+                currentHound.Hound.DistanceTravelled == nextHound.Hound.DistanceTravelled)
+                return true;
+            return false;
+
         }
     }
 }
