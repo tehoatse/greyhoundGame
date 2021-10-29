@@ -18,8 +18,8 @@ namespace greyhoundGame
         {
             Console.WriteLine("setting positions");
             int positionCounter = 0;
-            var finishedHounds = getFinishedHounds(hounds);
-            var runningHounds = getRunningHounds(hounds);
+            var finishedHounds = GetFinishedHounds(hounds);
+            var runningHounds = GetRunningHounds(hounds);
             positionCounter = AllocatePositions(finishedHounds, positionCounter);
             AllocatePositions(runningHounds, positionCounter);
          
@@ -35,7 +35,7 @@ namespace greyhoundGame
             }
         }
 
-        private RaceGreyhound[] getFinishedHounds(RaceGreyhound[] hounds)
+        private RaceGreyhound[] GetFinishedHounds(RaceGreyhound[] hounds)
         {
             Console.WriteLine("checking finished hounds");
             var finishedHounds = from hound in hounds where (hound.Finished == true) select hound;
@@ -46,7 +46,7 @@ namespace greyhoundGame
             return orderedFinishedHounds.ToArray();
         }
 
-        private RaceGreyhound[] getRunningHounds(RaceGreyhound[] hounds)
+        private RaceGreyhound[] GetRunningHounds(RaceGreyhound[] hounds)
         {
             Console.WriteLine("checking running hounds");
             var runningHounds = from hound in hounds where (hound.Finished == false) select hound;
@@ -57,7 +57,7 @@ namespace greyhoundGame
             return orderedRunningHounds.ToArray();
         }
 
-        private bool areDogsTied(RaceGreyhound currentHound, RaceGreyhound nextHound)
+        private bool AreDogsTied(RaceGreyhound currentHound, RaceGreyhound nextHound)
         {
             if (!currentHound.Finished && currentHound.DistanceToFinish == nextHound.DistanceToFinish)
                 return true;
@@ -69,7 +69,7 @@ namespace greyhoundGame
             return false;
         }
 
-        private RaceGreyhound getNextHound(RaceGreyhound[] houndList, RaceGreyhound hound)
+        private RaceGreyhound GetNextHound(RaceGreyhound[] houndList, RaceGreyhound hound)
         {
             int houndIndex = Array.IndexOf(houndList, hound);
             return houndList[houndIndex + 1];
@@ -91,13 +91,13 @@ namespace greyhoundGame
 
                 if (hound != lastHound)
                 {
-                    var nextHound = getNextHound(hounds, hound);
-                    while (areDogsTied(hound, nextHound))
+                    var nextHound = GetNextHound(hounds, hound);
+                    while (AreDogsTied(hound, nextHound))
                     {
                         nextHound.CurrentPostion = Positions[position];
                         if (nextHound == lastHound)
                             return position;
-                        nextHound = getNextHound(hounds, nextHound);
+                        nextHound = GetNextHound(hounds, nextHound);
                         dogCounter++;
                     }
                 }

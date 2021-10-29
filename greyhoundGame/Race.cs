@@ -116,7 +116,7 @@ namespace greyhoundGame
 
             }
 
-            Positions.SetPositions(raceHounds);
+            raceHounds = Positions.SetPositions(raceHounds);
             return going;
         }
 
