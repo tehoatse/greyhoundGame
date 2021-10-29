@@ -19,7 +19,7 @@ namespace greyhoundGame
             finishers.Add(new Finisher(hound, time));
         }
 
-        public void GiveHoundsPositions()
+        public void FinalPositions()
         {
             Finisher finalDog = finishers[finishers.Count -1];
             for (int dogCounter = 0;
@@ -27,13 +27,15 @@ namespace greyhoundGame
                 dogCounter++)
             {
                 int finishingPosition = dogCounter + 1;
+                
                 Finisher currentHound = finishers[dogCounter];
+                
                 currentHound.Position = finishingPosition;
 
                 if (currentHound == finalDog)
                     return;
 
-                Finisher nextHound = finishers[dogCounter + 1];
+                Finisher nextHound = finishers[currentHound.Position + 1];
 
                 while(areDogsTied(currentHound, nextHound))
                 {

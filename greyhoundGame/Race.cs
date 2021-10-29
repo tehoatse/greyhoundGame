@@ -55,7 +55,7 @@ namespace greyhoundGame
                 raceGoing = Tick(results);
             }
 
-            results.GiveHoundsPositions();
+            results.FinalPositions();
             return results;
         }
 
@@ -64,7 +64,6 @@ namespace greyhoundGame
             Greyhounds = hounds;
             raceHounds = new RaceGreyhound[hounds.Length];
 
-            // so we're putting them all in the race, registering them basically and salting them at the same time
             for (int adder = 0; adder < Greyhounds.Length; adder++)
             {
                 raceHounds[adder] = new RaceGreyhound(Greyhounds[adder], Distance);
@@ -77,9 +76,6 @@ namespace greyhoundGame
             timePassed++;
             bool going = true;
             int finishedCounter = 0;
-
-            // looks like this is where the race logic will live
-            // move each hound in the list
 
             foreach (var hound in raceHounds)
             {
@@ -96,11 +92,11 @@ namespace greyhoundGame
                         $"Speed: {hound.CurrentSpeed} " +
                         $"Stam: {hound.CurrentStam} " +
                         $"Distance gone: {hound.DistanceTravelled} " +
-                        $"Finished?: {hound.Finished}\n";
+                        $"Finished?: {hound.Finished}";
 
                     // text file is dumping just results here ! :DDD
-                    LogText.Dump(outString);
-                    ResultsDump(outString);
+
+                    Console.WriteLine(outString);
                 }
             }
 
@@ -114,9 +110,6 @@ namespace greyhoundGame
                     going = false;
 
             }
-
-            LogText.Dump("\n");
-            Console.WriteLine("Tick!");
             return going;
         }
 
@@ -144,18 +137,21 @@ namespace greyhoundGame
 
         private void CheckFinishLine(RaceGreyhound hound, Results results)
         {
-            if (hound.DistanceTravelled >= Distance)
+            if (hound.DistanceToFinish <= 0)
             {
                 hound.Finished = true;
                 results.AddFinisher(hound, timePassed);
-                LogText.Dump("Finisher added!\n");
+                Console.WriteLine("Finisher added!\n");
             }
         }
 
         private void Move(RaceGreyhound hound)
         {
-            if (hound.DistanceTravelled <= Distance)
+            if (hound.DistanceToFinish <= Distance)
+            {
                 hound.DistanceTravelled += hound.CurrentSpeed / statDivisor;
+                hound.DistanceToFinish -= hound.CurrentSpeed / statDivisor;
+            }
         }
 
         private void ResultsDump(string dump)

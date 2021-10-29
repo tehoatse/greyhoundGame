@@ -4,8 +4,7 @@ namespace greyhoundGame
 {
     class RaceGreyhound
     {
-        // we're using this class to describe a greyhound on raceday so we're not altering its stats on the day
-        // I guess we're using this to add a bunch of data to greyhound
+
         public Greyhound Greyhound { get; private set; }
         public int CurrentSpeed { get; set; }
         public int CurrentStam { get; set; }
@@ -13,8 +12,9 @@ namespace greyhoundGame
         public int SaltedTenacity { get; private set; }
         public int SaltedAcceleration { get; private set; }
         public int DistanceTravelled { get; set; }
-        public int RaceLength { get; set; }
+        public int DistanceToFinish { get; set; }
         public bool Finished { get; set; }
+        public Position CurrentPostion { get; set; } 
 
         public RaceGreyhound(Greyhound hound)
         {
@@ -24,7 +24,7 @@ namespace greyhoundGame
         public RaceGreyhound(Greyhound hound, int raceLength)
         {
             BuildHound(hound);
-            RaceLength = raceLength;
+            DistanceToFinish = raceLength;
         }
 
         // generating a modifier to make thing random
@@ -61,7 +61,7 @@ namespace greyhoundGame
             SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             Finished = false;
-            RaceLength = 500;
+
         }
     }
 

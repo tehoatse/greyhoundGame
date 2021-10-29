@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace greyhoundGame
 {
@@ -14,8 +16,6 @@ namespace greyhoundGame
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("We're gunna make a greyhound with all 80s!");
-            Console.WriteLine("Building dat greyhound!");
             Greyhound allEighties = new Greyhound();
             Greyhound allEighties2 = new Greyhound();
             Greyhound handsome = new Greyhound();
@@ -60,20 +60,23 @@ namespace greyhoundGame
 
             Greyhound[] hounds = { allEighties, allEighties2, handsome, hanover, butter };
 
-            
-            Race testRace = new Race(hounds);
-            Race secondRace = new Race(hounds, 250);
-            Race thirdRace = new Race(hounds, 1000);
-            
-            var results = testRace.Start();
-            LogText.Dump(results.ToString());
-            results = secondRace.Start();
-            LogText.Dump(results.ToString());
-            results = thirdRace.Start();
-            LogText.Dump(results.ToString());
 
-            Console.WriteLine(GreyhoundStrings.GetOrdinalNumber(10000000));
-            
+            Race testRace = new Race(hounds, 5);
+
+            Console.WriteLine(testRace.Start().ToString());
+
+            //Race secondRace = new Race(hounds, 250);
+            //Race thirdRace = new Race(hounds, 1000);
+
+            //var results = testRace.Start();
+            //LogText.Dump(results.ToString());
+            //results = secondRace.Start();
+            //LogText.Dump(results.ToString());
+            //results = thirdRace.Start();
+            //LogText.Dump(results.ToString());
+
+            //Console.WriteLine(GreyhoundStrings.GetOrdinalNumber(10000000));
+
         }
     }
     public class Mutator
@@ -106,4 +109,52 @@ namespace greyhoundGame
     {
         // a greyhound has a weight
     }
+
+    class PositionManager
+    {
+        public int StartingBoxes { get; private set; }
+        public Position[] Positions { get; private set; }
+
+        public PositionManager(int startingBoxes)
+        {
+            StartingBoxes = startingBoxes;
+            generatePositions();
+        }
+
+        public void SetPositions(RaceGreyhound[] hounds)
+        {
+            IEnumerable<RaceGreyhound> runningList = hounds.OrderBy(hounds => hounds.DistanceToFinish);
+            
+            for(int position = 0; position < Positions.Length; position++)
+            {
+                hounds[position].CurrentPostion = Positions[position];
+            }
+            
+        }
+            
+        private void generatePositions()
+        {
+            Positions = new Position[StartingBoxes - 1];
+            for(int position = 1; position <= StartingBoxes; position++)
+            {
+                Positions[position - 1] = new Position(position);
+            }
+        }
+    }
+
+    class Position
+    {
+        int Number { get; set; }
+        string Ordinal { get; set; }
+        string OrdinalText { get; set; }
+
+        public Position(int position)
+        {
+            Number = position;
+            Ordinal = GreyhoundStrings.GetOrdinalNumber(position);
+            OrdinalText = GreyhoundStrings.GetOrdinalName(position);
+
+        }
+    }
+
 }
