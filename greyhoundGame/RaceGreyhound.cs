@@ -14,6 +14,7 @@ namespace greyhoundGame
         public int DistanceTravelled { get; set; }
         public int DistanceToFinish { get; set; }
         public bool Finished { get; set; }
+        public int FinishedTime { get; set; }
         public Position CurrentPostion { get; set; } 
 
         public RaceGreyhound(Greyhound hound)
@@ -61,7 +62,7 @@ namespace greyhoundGame
             SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             Finished = false;
-
+            FinishedTime = -1;
         }
     }
 

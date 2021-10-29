@@ -8,6 +8,7 @@ namespace greyhoundGame
         private const int defaultRace = 500;
         private const int tenacityOffset = 125;
         private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
 
         // greyhounds run a race, lets see who's the fastest!
         // the greyhounds in the race
@@ -16,6 +17,8 @@ namespace greyhoundGame
         //the length of the race
         public int Distance { get; private set; }
 
+        public PositionManager Positions { get; set; }
+
         private RaceGreyhound[] raceHounds;
 
         // how many ticks have gone
@@ -23,12 +26,14 @@ namespace greyhoundGame
 
         public Race(Greyhound[] greyhounds)
         {
+            Positions = new PositionManager(greyhounds.Length);
             AddHounds(greyhounds);
             Distance = defaultRace;
         }
 
         public Race(Greyhound[] greyhounds, int distance )
         {
+            Positions = new PositionManager(greyhounds.Length);
             AddHounds(greyhounds);
             Distance = distance;
         }
@@ -47,15 +52,14 @@ namespace greyhoundGame
              */
 
             bool raceGoing = true;
-            var results = new Results();
-
+            var results = new Results(raceHounds);
 
             while(raceGoing)
             {
-                raceGoing = Tick(results);
+                raceGoing = Tick();
+                Console.WriteLine(results.ToString());
             }
 
-            results.FinalPositions();
             return results;
         }
 
@@ -71,8 +75,9 @@ namespace greyhoundGame
 
         }
 
-        private bool Tick(Results results)
+        private bool Tick()
         {
+            Console.WriteLine("tick");
             timePassed++;
             bool going = true;
             int finishedCounter = 0;
@@ -84,7 +89,7 @@ namespace greyhoundGame
                     Accelerate(hound);
                     Tire(hound);
                     Move(hound);
-                    CheckFinishLine(hound, results);
+                    CheckFinishLine(hound);
 
                     // we're gunna build the log string here
                     string outString = 
@@ -110,6 +115,8 @@ namespace greyhoundGame
                     going = false;
 
             }
+
+            Positions.SetPositions(raceHounds);
             return going;
         }
 
@@ -135,12 +142,12 @@ namespace greyhoundGame
             }
         }
 
-        private void CheckFinishLine(RaceGreyhound hound, Results results)
+        private void CheckFinishLine(RaceGreyhound hound)
         {
-            if (hound.DistanceToFinish <= 0)
+            if (hound.DistanceToFinish <= 0 && !hound.Finished)
             {
                 hound.Finished = true;
-                results.AddFinisher(hound, timePassed);
+                hound.FinishedTime = timePassed;
                 Console.WriteLine("Finisher added!\n");
             }
         }
