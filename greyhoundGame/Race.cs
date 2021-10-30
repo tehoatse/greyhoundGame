@@ -14,8 +14,8 @@ namespace greyhoundGame
         // the greyhounds in the race
         public Greyhound[] Greyhounds { get; private set; }
         
-        //the length of the race
-        public int Distance { get; private set; }
+        
+        public int RaceLength { get; private set; }
 
         public PositionManager Positions { get; set; }
 
@@ -27,57 +27,47 @@ namespace greyhoundGame
         public Race(Greyhound[] greyhounds)
         {
             Positions = new PositionManager(greyhounds.Length);
-            AddHounds(greyhounds);
-            Distance = defaultRace;
+            RaceLength = defaultRace;
+            AddHounds(greyhounds, RaceLength);
+            
         }
 
-        public Race(Greyhound[] greyhounds, int distance )
+        public Race(Greyhound[] greyhounds, int distance)
         {
             Positions = new PositionManager(greyhounds.Length);
-            AddHounds(greyhounds);
-            Distance = distance;
+            RaceLength = distance;
+            AddHounds(greyhounds, distance);
+            
         }
 
         public Results Start()
         {
-            /*
-             * so the way this is to work when we his 'start' a race starts
-             * it's made up of ticks
-             * each tick checks - 
-             * the speed of a hound + the stamina of a hound
-             * if the speed is less than top speed increase speed by an increment based on acceleration
-             * if decrease the current stamina
-             * if stamina is used up, decrease speed by an increment based on tenacity
-             * cool? cool.
-             */
-
             bool raceGoing = true;
             var results = new Results(raceHounds);
 
             while(raceGoing)
             {
                 raceGoing = Tick();
-                Console.WriteLine(results.ToString());
             }
 
             return results;
         }
 
-        private void AddHounds(Greyhound[] hounds)
+        private void AddHounds(Greyhound[] hounds, int distance)
         {
             Greyhounds = hounds;
             raceHounds = new RaceGreyhound[hounds.Length];
 
             for (int adder = 0; adder < Greyhounds.Length; adder++)
             {
-                raceHounds[adder] = new RaceGreyhound(Greyhounds[adder], Distance);
+                raceHounds[adder] = new RaceGreyhound(Greyhounds[adder], distance);
             }
 
         }
 
         private bool Tick()
         {
-            Console.WriteLine("tick");
+            Console.WriteLine("\ntick");
             timePassed++;
             bool going = true;
             int finishedCounter = 0;
@@ -90,18 +80,6 @@ namespace greyhoundGame
                     Tire(hound);
                     Move(hound);
                     CheckFinishLine(hound);
-
-                    // we're gunna build the log string here
-                    string outString = 
-                        $"Name: {hound.Greyhound.Name} " +
-                        $"Speed: {hound.CurrentSpeed} " +
-                        $"Stam: {hound.CurrentStam} " +
-                        $"Distance gone: {hound.DistanceTravelled} " +
-                        $"Finished?: {hound.Finished}";
-
-                    // text file is dumping just results here ! :DDD
-
-                    Console.WriteLine(outString);
                 }
             }
 
@@ -117,6 +95,21 @@ namespace greyhoundGame
             }
 
             raceHounds = Positions.SetPositions(raceHounds);
+
+            foreach (var hound in raceHounds)
+            {
+                string outString =
+                $"{hound.CurrentPostion.Ordinal} " +
+                $"{hound.Greyhound.Name} " +
+                $"Speed: {hound.CurrentSpeed} " +
+                $"Stam: {hound.CurrentStam} " +
+                $"Distance gone: {hound.DistanceTravelled} " +
+                $"Finished?: {hound.Finished}";
+                if (hound.Finished)
+                    outString += $" Finishing time: {hound.FinishedTime}";
+                Console.WriteLine(outString);
+            }
+
             return going;
         }
 
@@ -154,7 +147,7 @@ namespace greyhoundGame
 
         private void Move(RaceGreyhound hound)
         {
-            if (hound.DistanceToFinish <= Distance)
+            if (hound.DistanceToFinish <= RaceLength)
             {
                 hound.DistanceTravelled += hound.CurrentSpeed / statDivisor;
                 hound.DistanceToFinish -= hound.CurrentSpeed / statDivisor;

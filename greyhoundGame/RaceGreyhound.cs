@@ -64,6 +64,11 @@ namespace greyhoundGame
             Finished = false;
             FinishedTime = -1;
         }
+
+        public override string ToString()
+        {
+            return $"{Greyhound.Name} {CurrentPostion.Ordinal}";
+        }
     }
 
 }

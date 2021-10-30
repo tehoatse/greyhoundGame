@@ -60,7 +60,7 @@ namespace greyhoundGame
             Greyhound[] hounds = { allEighties, allEighties2, handsome, hanover, butter };
 
 
-            Race testRace = new Race(hounds, 500);
+            Race testRace = new Race(hounds, 10);
 
             Console.WriteLine(testRace.Start().ToString());
 

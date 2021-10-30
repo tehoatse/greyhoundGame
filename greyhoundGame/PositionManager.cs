@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Collections;
 
 namespace greyhoundGame
 {
@@ -16,16 +17,16 @@ namespace greyhoundGame
 
         public RaceGreyhound[] SetPositions(RaceGreyhound[] hounds)
         {
-            Console.WriteLine("setting positions");
             int positionCounter = 0;
             var finishedHounds = GetFinishedHounds(hounds);
             var runningHounds = GetRunningHounds(hounds);
             positionCounter = AllocatePositions(finishedHounds, positionCounter);
             AllocatePositions(runningHounds, positionCounter);
          
-            return finishedHounds.Concat(runningHounds).ToArray();
+            return SortHoundsByPosition(finishedHounds.Concat(runningHounds).ToArray());
         }
 
+#region private methods
         private void GeneratePositions()
         {
             Positions = new Position[StartingBoxes];
@@ -37,21 +38,19 @@ namespace greyhoundGame
 
         private RaceGreyhound[] GetFinishedHounds(RaceGreyhound[] hounds)
         {
-            Console.WriteLine("checking finished hounds");
             var finishedHounds = from hound in hounds where (hound.Finished == true) select hound;
             var orderedFinishedHounds =
                 (finishedHounds.OrderBy(
-                    finishedHounds => finishedHounds.FinishedTime).ThenBy(
+                    finishedHounds => finishedHounds.FinishedTime).ThenByDescending(
                     finishedHounds => finishedHounds.DistanceTravelled));
             return orderedFinishedHounds.ToArray();
         }
 
         private RaceGreyhound[] GetRunningHounds(RaceGreyhound[] hounds)
         {
-            Console.WriteLine("checking running hounds");
             var runningHounds = from hound in hounds where (hound.Finished == false) select hound;
             var orderedRunningHounds =
-                (runningHounds.OrderBy(
+                (runningHounds.OrderByDescending(
                     runningHounds => runningHounds.DistanceTravelled));
 
             return orderedRunningHounds.ToArray();
@@ -80,15 +79,12 @@ namespace greyhoundGame
             if (hounds.Length == 0)
                 return position;
 
-            Console.WriteLine("allocating hounds");
             var lastHound = hounds[hounds.Length -1];
 
             for (int dogCounter = 0; dogCounter < hounds.Length; dogCounter++)
             {
                 var hound = hounds[dogCounter];
                 hound.CurrentPostion = Positions[position];
-                Console.WriteLine("Position Allocated");
-
                 if (hound != lastHound)
                 {
                     var nextHound = GetNextHound(hounds, hound);
@@ -96,7 +92,7 @@ namespace greyhoundGame
                     {
                         nextHound.CurrentPostion = Positions[position];
                         if (nextHound == lastHound)
-                            return position;
+                            return position++;
                         nextHound = GetNextHound(hounds, nextHound);
                         dogCounter++;
                     }
@@ -107,7 +103,13 @@ namespace greyhoundGame
             return position;
         }
 
+        private RaceGreyhound[] SortHoundsByPosition(RaceGreyhound[] hounds)
+        {
+            RaceGreyhound[] orderedHounds = hounds.OrderBy(hounds => hounds.CurrentPostion.Number).ToArray();
+            return orderedHounds;
+        }
+
 
     }
-
+    #endregion
 }
