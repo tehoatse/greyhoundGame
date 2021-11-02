@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace greyhoundGame
 {
@@ -13,7 +15,6 @@ namespace greyhoundGame
         // greyhounds run a race, lets see who's the fastest!
         // the greyhounds in the race
         public Greyhound[] Greyhounds { get; private set; }
-        
         
         public int RaceLength { get; private set; }
 
@@ -58,10 +59,8 @@ namespace greyhoundGame
             Greyhounds = hounds;
             raceHounds = new RaceGreyhound[hounds.Length];
 
-            for (int adder = 0; adder < Greyhounds.Length; adder++)
-            {
-                raceHounds[adder] = new RaceGreyhound(Greyhounds[adder], distance);
-            }
+            raceHounds = Enumerable.Range(0, hounds.Length).Select(
+                result => new RaceGreyhound(Greyhounds[result], distance)).ToArray();
 
         }
 
@@ -69,9 +68,8 @@ namespace greyhoundGame
         {
             Console.WriteLine("\ntick");
             timePassed++;
-            bool going = true;
-            int finishedCounter = 0;
-
+            bool raceGoing = true;
+            
             foreach (var hound in raceHounds)
             {
                 if (!hound.Finished)
@@ -83,16 +81,7 @@ namespace greyhoundGame
                 }
             }
 
-            // is the race over?
-            foreach (var hound in raceHounds)
-            {
-                if (hound.Finished)
-                    finishedCounter++;
-
-                if (finishedCounter >= raceHounds.Length)
-                    going = false;
-
-            }
+            raceGoing = raceHounds.All(hound => !hound.Finished);
 
             raceHounds = Positions.GetPositions(raceHounds);
 
@@ -110,7 +99,7 @@ namespace greyhoundGame
                 Console.WriteLine(outString);
             }
 
-            return going;
+            return raceGoing;
         }
 
         private void Accelerate(RaceGreyhound hound)
