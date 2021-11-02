@@ -94,12 +94,12 @@ namespace greyhoundGame
 
             }
 
-            raceHounds = Positions.SetPositions(raceHounds);
+            raceHounds = Positions.GetPositions(raceHounds);
 
             foreach (var hound in raceHounds)
             {
                 string outString =
-                $"{hound.CurrentPostion.Ordinal} " +
+                $"{hound.CurrentPosition.Ordinal} " +
                 $"{hound.Greyhound.Name} " +
                 $"Speed: {hound.CurrentSpeed} " +
                 $"Stam: {hound.CurrentStam} " +

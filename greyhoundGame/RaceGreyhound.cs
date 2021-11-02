@@ -15,7 +15,7 @@ namespace greyhoundGame
         public int DistanceToFinish { get; set; }
         public bool Finished { get; set; }
         public int FinishedTime { get; set; }
-        public Position CurrentPostion { get; set; } 
+        public Position CurrentPosition { get; set; } 
 
         public RaceGreyhound(Greyhound hound)
         {
@@ -67,7 +67,7 @@ namespace greyhoundGame
 
         public override string ToString()
         {
-            return $"{Greyhound.Name} {CurrentPostion.Ordinal}";
+            return $"{Greyhound.Name} {CurrentPosition.Ordinal}";
         }
     }
 

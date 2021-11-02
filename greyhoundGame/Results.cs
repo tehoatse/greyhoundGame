@@ -19,7 +19,7 @@ namespace greyhoundGame
             
             foreach (var hound in Hounds)
             {
-                outString += $"{hound.CurrentPostion.Ordinal} is {hound.Greyhound.Name}\n";
+                outString += $"{hound.CurrentPosition.Ordinal} is {hound.Greyhound.Name}\n";
             }
             return outString;
         }

@@ -15,22 +15,21 @@ namespace greyhoundGame
             GeneratePositions();
         }
 
-        public RaceGreyhound[] SetPositions(RaceGreyhound[] hounds)
+        public RaceGreyhound[] GetPositions(RaceGreyhound[] hounds)
         {
-            int positionCounter = 0;
-            var finishedHounds = GetFinishedHounds(hounds);
-            var runningHounds = GetRunningHounds(hounds);
-            positionCounter = AllocatePositions(finishedHounds, positionCounter);
-            AllocatePositions(runningHounds, positionCounter);
-         
-            return SortHoundsByPosition(finishedHounds.Concat(runningHounds).ToArray());
+
+            var orderedHounds = GetFinishedHounds(hounds).Concat(GetRunningHounds(hounds)).ToArray();
+
+            AllocatePositions(orderedHounds);
+          
+            return orderedHounds;
         }
 
 #region private methods
         private void GeneratePositions()
         {
             Positions = new Position[StartingBoxes];
-            for (int position = 1; position <= StartingBoxes; position++)
+            foreach (int position in Enumerable.Range(1, StartingBoxes))
             {
                 Positions[position - 1] = new Position(position);
             }
@@ -58,7 +57,9 @@ namespace greyhoundGame
 
         private bool AreDogsTied(RaceGreyhound currentHound, RaceGreyhound nextHound)
         {
-            if (!currentHound.Finished && currentHound.DistanceToFinish == nextHound.DistanceToFinish)
+            if (!currentHound.Finished && 
+                !nextHound.Finished &&
+                currentHound.DistanceToFinish == nextHound.DistanceToFinish)
                 return true;
             if (!currentHound.Finished)
                 return false;
@@ -71,45 +72,46 @@ namespace greyhoundGame
         private RaceGreyhound GetNextHound(RaceGreyhound[] houndList, RaceGreyhound hound)
         {
             int houndIndex = Array.IndexOf(houndList, hound);
+
+            if (houndIndex >= houndList.Length)
+                return null;
+
             return houndList[houndIndex + 1];
         }
 
-        private int AllocatePositions(RaceGreyhound[] hounds, int position)
+        private void AllocatePositions(RaceGreyhound[] racingHounds)
         {
-            if (hounds.Length == 0)
-                return position;
+            var currentHound = racingHounds[0];
+            var finalHound = racingHounds[racingHounds.Length - 1];
 
-            var lastHound = hounds[hounds.Length -1];
-
-            for (int dogCounter = 0; dogCounter < hounds.Length; dogCounter++)
+            foreach (var position in Positions)
             {
-                var hound = hounds[dogCounter];
-                hound.CurrentPostion = Positions[position];
-                if (hound != lastHound)
-                {
-                    var nextHound = GetNextHound(hounds, hound);
-                    while (AreDogsTied(hound, nextHound))
-                    {
-                        nextHound.CurrentPostion = Positions[position];
-                        if (nextHound == lastHound)
-                            return position++;
-                        nextHound = GetNextHound(hounds, nextHound);
-                        dogCounter++;
-                    }
-                }
-                position++;
-            }
+                currentHound.CurrentPosition = position;
+                
+                if (currentHound == finalHound)
+                    return;
 
-            return position;
+                var nextHound = GetNextHound(racingHounds, currentHound);
+
+                while(AreDogsTied(currentHound, nextHound))
+                {
+                    nextHound.CurrentPosition = position;
+                    currentHound = nextHound;
+
+                    if (currentHound == finalHound)
+                        return;
+
+                    nextHound = GetNextHound(racingHounds, currentHound);
+                }
+                currentHound = nextHound;
+            }
         }
 
         private RaceGreyhound[] SortHoundsByPosition(RaceGreyhound[] hounds)
         {
-            RaceGreyhound[] orderedHounds = hounds.OrderBy(hounds => hounds.CurrentPostion.Number).ToArray();
+            RaceGreyhound[] orderedHounds = hounds.OrderBy(hounds => hounds.CurrentPosition.Number).ToArray();
             return orderedHounds;
         }
-
-
     }
     #endregion
 }
