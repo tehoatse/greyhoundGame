@@ -17,26 +17,36 @@ namespace greyhoundGame
         public Greyhound[] Greyhounds { get; private set; }
         public int RaceLength { get; private set; }
         public PositionManager Positions { get; set; }
+        private RaceTrack Track { get; set; }
 
         private RaceGreyhound[] raceHounds;
+
 
         // how many ticks have gone
         private int timePassed = 0;
 
-        public Race(Greyhound[] greyhounds)
-        {
-            Positions = new PositionManager(greyhounds.Length);
-            RaceLength = defaultRace;
-            AddHounds(greyhounds, RaceLength);
+        //public Race(Greyhound[] greyhounds)
+        //{
+        //    Positions = new PositionManager(greyhounds.Length);
+        //    RaceLength = defaultRace;
+        //    AddHounds(greyhounds, Track);
             
-        }
+        //}
 
-        public Race(Greyhound[] greyhounds, int distance)
+        //public Race(Greyhound[] greyhounds, int distance)
+        //{
+        //    Positions = new PositionManager(greyhounds.Length);
+        //    RaceLength = distance;
+        //    AddHounds(greyhounds, distance);
+        //}
+
+        public Race(Greyhound[] greyhounds, GreyhoundTrack venue, int distance)
         {
             Positions = new PositionManager(greyhounds.Length);
             RaceLength = distance;
-            AddHounds(greyhounds, distance);
-            
+            Track = new RaceTrack(venue, distance, greyhounds.Length);
+            AddHounds(greyhounds, Track);
+  
         }
 
         public Results Start()
@@ -44,6 +54,13 @@ namespace greyhoundGame
             bool raceGoing = true;
             var results = new Results(raceHounds);
 
+            
+            foreach (var hound in raceHounds)
+            {
+                hound.StartingBox = Array.IndexOf(raceHounds, hound);
+                hound.Coordinates = Track.getCoordinates(0, hound.StartingBox * RaceTrack.TrackSpacing);
+            }
+                        
             while(raceGoing)
             {
                 raceGoing = Tick();
@@ -52,14 +69,13 @@ namespace greyhoundGame
             return results;
         }
 
-        private void AddHounds(Greyhound[] hounds, int distance)
+        private void AddHounds(Greyhound[] hounds, RaceTrack track)
         {
             Greyhounds = hounds;
             raceHounds = new RaceGreyhound[hounds.Length];
 
             raceHounds = Enumerable.Range(0, hounds.Length).Select(
-                result => new RaceGreyhound(Greyhounds[result], distance)).ToArray();
-
+                result => new RaceGreyhound(Greyhounds[result], track)).ToArray();
         }
 
         private bool Tick()
@@ -81,8 +97,7 @@ namespace greyhoundGame
            
             raceHounds = Positions.GetPositions(raceHounds);
             raceGoing = !raceHounds.All(hound => hound.Finished);
-
-            
+         
 
             foreach (var hound in raceHounds)
             {

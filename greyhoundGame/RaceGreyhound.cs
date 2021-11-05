@@ -4,7 +4,6 @@ namespace greyhoundGame
 {
     class RaceGreyhound
     {
-
         public Greyhound Greyhound { get; private set; }
         public int CurrentSpeed { get; set; }
         public int CurrentStam { get; set; }
@@ -15,17 +14,21 @@ namespace greyhoundGame
         public int DistanceToFinish { get; set; }
         public bool Finished { get; set; }
         public int FinishedTime { get; set; }
-        public Position CurrentPosition { get; set; } 
+        public Position CurrentPosition { get; set; }
+        public RaceSquare Coordinates { get; set;}
+        public RaceTrack Track { get; set; }
+        public int StartingBox { get; set; }
 
         public RaceGreyhound(Greyhound hound)
         {
             BuildHound(hound);
         }
 
-        public RaceGreyhound(Greyhound hound, int raceLength)
+        public RaceGreyhound(Greyhound hound, RaceTrack track)
         {
             BuildHound(hound);
-            DistanceToFinish = raceLength;
+            Track = track;
+            DistanceToFinish = track.Length;
         }
 
         // generating a modifier to make thing random

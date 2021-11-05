@@ -2,6 +2,9 @@
 {
     public class RaceTrack
     {
+
+        public static int TrackSpacing = 3;
+
         public int Width { get; private set; }
         public GreyhoundTrack Venue { get; private set; }
         
@@ -11,9 +14,14 @@
         public RaceTrack(GreyhoundTrack track, int length, int boxes)
         {
             Venue = track;   
-            Width = boxes *3;
+            Width = boxes * TrackSpacing;
             Length = length;
             CreateTrack();
+        }
+
+        public RaceSquare getCoordinates(int xCoord, int yCoord)
+        {
+            return PhysicalRaceTrack[xCoord, yCoord];
         }
 
         private void CreateTrack()
