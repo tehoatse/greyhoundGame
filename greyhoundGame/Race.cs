@@ -91,7 +91,6 @@ namespace greyhoundGame
                     Accelerate(hound);
                     Tire(hound);
                     Move(hound);
-                    CheckFinishLine(hound);
                 }
             }
            
@@ -154,6 +153,9 @@ namespace greyhoundGame
             {
                 hound.DistanceTravelled += hound.CurrentSpeed / statDivisor;
                 hound.DistanceToFinish -= hound.CurrentSpeed / statDivisor;
+                hound.Coordinates = hound.Track.getCoordinates(
+                    hound.Coordinates.XCoord + (hound.CurrentSpeed / statDivisor), 
+                    hound.Coordinates.YCoord);
             }
         }
 

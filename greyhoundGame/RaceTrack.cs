@@ -2,7 +2,7 @@
 {
     public class RaceTrack
     {
-
+        // hey loook
         public static int TrackSpacing = 3;
 
         public int Width { get; private set; }
@@ -27,9 +27,10 @@
         private void CreateTrack()
         {
             PhysicalRaceTrack = new RaceSquare[Length, Width];
-            for (int trackLength = 0; trackLength > Length; trackLength++)
+
+            for (int trackLength = 0; trackLength < Length; trackLength++)
             {
-                for (int trackWidth = 0; trackWidth > Width; trackWidth++)
+                for (int trackWidth = 0; trackWidth < Width; trackWidth++)
                 {
                     PhysicalRaceTrack[trackLength, trackWidth] = new RaceSquare(trackLength, trackWidth);
                 }
