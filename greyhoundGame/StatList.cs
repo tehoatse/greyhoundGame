@@ -18,6 +18,7 @@ namespace greyhoundGame
         public Stat Strength { get; set; }
         public Stat Aggression { get; set; }
         public Stat Fitness { get; set; }
+        public Stat Size { get; set; }
 
 
         // creates a set of stats defaulting to 1
@@ -46,7 +47,8 @@ namespace greyhoundGame
                 Agility,
                 Strength,
                 Aggression,
-                Fitness
+                Fitness,
+                Size
             };
 
             Console.WriteLine(returnList.Length);
@@ -67,6 +69,8 @@ namespace greyhoundGame
             Strength = new Stat(GreyhoundStrings.Strength, GreyhoundStrings.StrengthDesc);
             Aggression = new Stat(GreyhoundStrings.Aggression, GreyhoundStrings.AggressionDesc);
             Fitness = new Stat(GreyhoundStrings.Fitness, GreyhoundStrings.FitnessDesc);
+            Size = new Stat(GreyhoundStrings.Size, GreyhoundStrings.SizeDesc);
+            
         }
 
         private void CreateStats(int[] stats)

@@ -21,7 +21,7 @@ namespace greyhoundGame
 
             //SaveHounds(hounds);
 
-            Race testRace = new Race(hounds, 10);
+            Race testRace = new Race(hounds, 800);
 
             Console.WriteLine(testRace.Start().ToString());
 
@@ -88,4 +88,10 @@ namespace greyhoundGame
         // a greyhound has a weight
     }
 
+    interface IMutator
+    {
+        void SetStats(Stat[] stat);
+        Stat[] GetStats();
+        bool IsMutatorGlobal();
+    }
 }

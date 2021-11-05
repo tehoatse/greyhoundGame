@@ -35,7 +35,7 @@ namespace greyhoundGame
 
             int result = dice.Next(1, 100);
 
-            // so each statment has a return on it so I'm eliminating results
+            // so each statement has a return on it so I'm eliminating results
             // I'm not sure if the result periods are even and I don't care right now
             if (result <= 4)
                 return -20; //nasty!

@@ -26,6 +26,8 @@
         public static string AggressionDesc = "Will this greyhound start a fight?";
         public static string Fitness = "Fitness";
         public static string FitnessDesc = "How appropriate is this animal for its environment?";
+        public static string Size = "Size";
+        public static string SizeDesc = "How large is the greyhound. Large can be good, small can be better.";
 
         // ordinal numbers
         private static string First = "first";
@@ -41,7 +43,7 @@
         private static string Eleventh = "eleventh";
         private static string Twelfth = "twelfth";
         private static string Thirteenth = "thirteenth";
-        private static string Forteenth = "forteenth";
+        private static string Fourteenth = "fourteenth";
         private static string Fifteenth = "fifteenth";
         private static string Sixteenth = "sixteenth";
         private static string Seventeenth = "seventeenth";
@@ -62,7 +64,7 @@
         private static string EleventhNum = "11th";
         private static string TwelfthNum = "12th";
         private static string ThirteenthNum = "13th";
-        private static string ForteenthNum = "14th";
+        private static string FourteenthNum = "14th";
         private static string FifteenthNum = "15th";
         private static string SixteenthNum = "16th";
         private static string SeventeenthNum = "17th";
@@ -85,7 +87,7 @@
             Eleventh,
             Twelfth,
             Thirteenth,
-            Forteenth,
+            Fourteenth,
             Fifteenth,
             Sixteenth,
             Seventeenth,
@@ -109,7 +111,7 @@
             EleventhNum,
             TwelfthNum,
             ThirteenthNum,
-            ForteenthNum,
+            FourteenthNum,
             FifteenthNum,
             SixteenthNum,
             SeventeenthNum,

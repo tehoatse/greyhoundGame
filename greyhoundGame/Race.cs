@@ -15,9 +15,7 @@ namespace greyhoundGame
         // greyhounds run a race, lets see who's the fastest!
         // the greyhounds in the race
         public Greyhound[] Greyhounds { get; private set; }
-        
         public int RaceLength { get; private set; }
-
         public PositionManager Positions { get; set; }
 
         private RaceGreyhound[] raceHounds;
@@ -80,10 +78,11 @@ namespace greyhoundGame
                     CheckFinishLine(hound);
                 }
             }
-
-            raceGoing = raceHounds.All(hound => !hound.Finished);
-
+           
             raceHounds = Positions.GetPositions(raceHounds);
+            raceGoing = !raceHounds.All(hound => hound.Finished);
+
+            
 
             foreach (var hound in raceHounds)
             {
@@ -115,7 +114,7 @@ namespace greyhoundGame
         {
             if (!hound.Finished &&
                 hound.CurrentStam != 0)
-                hound.CurrentStam--;
+                hound.CurrentStam = hound.CurrentStam-3;
             else // higher tenacity is good, we need to invert the result
             {
                 hound.CurrentSpeed -= (tenacityOffset - hound.SaltedTenacity) / statDivisor;
