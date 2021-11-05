@@ -2,7 +2,7 @@
 
 namespace greyhoundGame
 {
-    class StatList
+    public class StatList
     {
         // this is a list of statistics that all greyhounds have, valued from 1 to 120
 
@@ -53,7 +53,6 @@ namespace greyhoundGame
             return returnList;
         }
 
-        // the contructors use this to CreateStats()
         private void CreateStats()
         {
             TopSpeed = new Stat(GreyhoundStrings.TopSpeed, GreyhoundStrings.TopSpeedDesc);
@@ -68,7 +67,6 @@ namespace greyhoundGame
             Strength = new Stat(GreyhoundStrings.Strength, GreyhoundStrings.StrengthDesc);
             Aggression = new Stat(GreyhoundStrings.Aggression, GreyhoundStrings.AggressionDesc);
             Fitness = new Stat(GreyhoundStrings.Fitness, GreyhoundStrings.FitnessDesc);
-
         }
 
         private void CreateStats(int[] stats)

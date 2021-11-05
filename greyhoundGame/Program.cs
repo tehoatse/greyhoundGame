@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace greyhoundGame
 {
@@ -15,50 +16,10 @@ namespace greyhoundGame
     {
         static void Main(string[] args)
         {
-            Greyhound allEighties = new Greyhound();
-            Greyhound allEighties2 = new Greyhound();
-            Greyhound handsome = new Greyhound();
-            Greyhound hanover = new Greyhound();
-            Greyhound butter = new Greyhound();
+            Greyhound[] hounds = LoadHounds();
 
-            // good old all eighties!
-            allEighties.Name = "Beef!";
-            allEighties.Age = 2;
-            allEighties.Stats.Stamina.StatValue = 80;
-            allEighties.Stats.TopSpeed.StatValue = 80;
-            allEighties.Stats.Acceleration.StatValue = 80;
-            allEighties.Stats.Tenacity.StatValue = 80;
 
-            allEighties2.Name = "Kevin the Dog";
-            allEighties2.Age = 2;
-            allEighties2.Stats.Stamina.StatValue = 80;
-            allEighties2.Stats.TopSpeed.StatValue = 80;
-            allEighties2.Stats.Acceleration.StatValue = 80;
-            allEighties2.Stats.Tenacity.StatValue = 80;
-
-            handsome.Name = "Handsome Stranger";
-            handsome.Age = 2;
-            handsome.Stats.Stamina.StatValue = 70;
-            handsome.Stats.TopSpeed.StatValue = 70;
-            handsome.Stats.Acceleration.StatValue = 70;
-            handsome.Stats.Tenacity.StatValue = 70;
-
-            hanover.Name = "Gargano";
-            hanover.Age = 2;
-            hanover.Stats.Stamina.StatValue = 70;
-            hanover.Stats.TopSpeed.StatValue = 70;
-            hanover.Stats.Acceleration.StatValue = 75;
-            hanover.Stats.Tenacity.StatValue = 60;
-
-            butter.Name = "Butter";
-            butter.Age = 2;
-            butter.Stats.Stamina.StatValue = 60;
-            butter.Stats.TopSpeed.StatValue = 60;
-            butter.Stats.Acceleration.StatValue = 60;
-            butter.Stats.Tenacity.StatValue = 60;
-
-            Greyhound[] hounds = { allEighties, allEighties2, handsome, hanover, butter };
-
+            //SaveHounds(hounds);
 
             Race testRace = new Race(hounds, 10);
 
@@ -77,6 +38,24 @@ namespace greyhoundGame
             //Console.WriteLine(GreyhoundStrings.GetOrdinalNumber(10000000));
 
         }
+
+        public static void SaveHounds(Greyhound[] hounds)
+        {
+            XmlSerializer write = new XmlSerializer(typeof(Greyhound[]));
+            FileStream file = System.IO.File.Create("greyhoundlist.xml");
+            write.Serialize(file, hounds);
+
+        }
+
+        public static Greyhound[] LoadHounds()
+        {
+            XmlSerializer reader = new XmlSerializer(typeof(Greyhound[]));
+            StreamReader file = new StreamReader("greyhoundlist.xml");
+            Greyhound[] hounds = (Greyhound[])reader.Deserialize(file);
+            file.Close();
+            return hounds;
+        }
+
     }
     public class Mutator
     {

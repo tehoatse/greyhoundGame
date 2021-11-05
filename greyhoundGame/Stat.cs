@@ -1,6 +1,6 @@
 ﻿namespace greyhoundGame
 {
-    class Stat
+    public class Stat
     {
         // the value of the statistic can't be less than 1, can't be more than 120, statistics over 80 are exceptional, over 100 unique
         private int _statistic;

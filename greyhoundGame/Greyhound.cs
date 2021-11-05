@@ -1,6 +1,9 @@
-﻿namespace greyhoundGame
+﻿using System;
+
+namespace greyhoundGame
 { 
-    class Greyhound
+    [Serializable()]
+    public class Greyhound
     {
         // a greyhound has statistics
         public StatList Stats { get; set; }
