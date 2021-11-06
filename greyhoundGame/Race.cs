@@ -7,22 +7,13 @@ namespace greyhoundGame
 {
     class Race
     {
-        private const int defaultRace = 500;
-        private const int tenacityOffset = 125;
-        private const int statDivisor = 5; // some stats need to be divided by five to work with
-        
-
-        // greyhounds run a race, lets see who's the fastest!
-        // the greyhounds in the race
+                
         public Greyhound[] Greyhounds { get; private set; }
         public int RaceLength { get; private set; }
         public PositionManager Positions { get; set; }
+
         private RaceTrack Track { get; set; }
-
         private RaceGreyhound[] raceHounds;
-
-
-        // how many ticks have gone
         private int timePassed = 0;
 
         public Race(Greyhound[] greyhounds, GreyhoundTrack venue, int distance)

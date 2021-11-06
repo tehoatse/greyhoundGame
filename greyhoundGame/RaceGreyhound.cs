@@ -4,7 +4,7 @@ namespace greyhoundGame
 {
     class RaceGreyhound
     {
-        public static int StatDivisor = 3;
+        public static int StatDivisor = 5;
         public static int TenacityOffset = 125;
         public static int MinimumSpeed = 5;
 
