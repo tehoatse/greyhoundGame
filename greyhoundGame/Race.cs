@@ -25,21 +25,6 @@ namespace greyhoundGame
         // how many ticks have gone
         private int timePassed = 0;
 
-        //public Race(Greyhound[] greyhounds)
-        //{
-        //    Positions = new PositionManager(greyhounds.Length);
-        //    RaceLength = defaultRace;
-        //    AddHounds(greyhounds, Track);
-            
-        //}
-
-        //public Race(Greyhound[] greyhounds, int distance)
-        //{
-        //    Positions = new PositionManager(greyhounds.Length);
-        //    RaceLength = distance;
-        //    AddHounds(greyhounds, distance);
-        //}
-
         public Race(Greyhound[] greyhounds, GreyhoundTrack venue, int distance)
         {
             Positions = new PositionManager(greyhounds.Length);
@@ -88,9 +73,9 @@ namespace greyhoundGame
             {
                 if (!hound.Finished)
                 {
-                    Accelerate(hound);
-                    Tire(hound);
-                    Move(hound);
+                    hound.Accelerate();
+                    hound.Move(timePassed);
+                    hound.Tire();
                 }
             }
            
@@ -105,7 +90,7 @@ namespace greyhoundGame
                 $"{hound.Greyhound.Name} " +
                 $"Speed: {hound.CurrentSpeed} " +
                 $"Stam: {hound.CurrentStam} " +
-                $"Distance gone: {hound.DistanceTravelled} " +
+                $"Distance to Finish: {hound.DistanceToFinish} " +
                 $"Finished?: {hound.Finished}";
                 if (hound.Finished)
                     outString += $" Finishing time: {hound.FinishedTime}";
@@ -113,50 +98,6 @@ namespace greyhoundGame
             }
 
             return raceGoing;
-        }
-
-        private void Accelerate(RaceGreyhound hound)
-        {
-            if (hound.CurrentSpeed < hound.SaltedTopSpeed &&
-                hound.CurrentStam != 0)
-            {
-                hound.CurrentSpeed += hound.SaltedAcceleration / statDivisor;
-            }
-        }
-
-        private void Tire(RaceGreyhound hound)
-        {
-            if (!hound.Finished &&
-                hound.CurrentStam != 0)
-                hound.CurrentStam = hound.CurrentStam-3;
-            else // higher tenacity is good, we need to invert the result
-            {
-                hound.CurrentSpeed -= (tenacityOffset - hound.SaltedTenacity) / statDivisor;
-                if (hound.CurrentSpeed < 5)
-                    hound.CurrentSpeed = 5;
-            }
-        }
-
-        private void CheckFinishLine(RaceGreyhound hound)
-        {
-            if (hound.DistanceToFinish <= 0 && !hound.Finished)
-            {
-                hound.Finished = true;
-                hound.FinishedTime = timePassed;
-                Console.WriteLine("Finisher added!\n");
-            }
-        }
-
-        private void Move(RaceGreyhound hound)
-        {
-            if (hound.DistanceToFinish <= RaceLength)
-            {
-                hound.DistanceTravelled += hound.CurrentSpeed / statDivisor;
-                hound.DistanceToFinish -= hound.CurrentSpeed / statDivisor;
-                hound.Coordinates = hound.Track.getCoordinates(
-                    hound.Coordinates.XCoord + (hound.CurrentSpeed / statDivisor), 
-                    hound.Coordinates.YCoord);
-            }
         }
 
         private void ResultsDump(string dump)

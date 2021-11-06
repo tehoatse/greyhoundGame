@@ -4,6 +4,10 @@ namespace greyhoundGame
 {
     class RaceGreyhound
     {
+        public static int StatDivisor = 3;
+        public static int TenacityOffset = 125;
+        public static int MinimumSpeed = 5;
+
         public Greyhound Greyhound { get; private set; }
         public int CurrentSpeed { get; set; }
         public int CurrentStam { get; set; }
@@ -60,12 +64,50 @@ namespace greyhoundGame
             Greyhound = hound;
             CurrentSpeed = 0;
             DistanceTravelled = 0;
-            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt()) * 3;
+            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt()) * 2;
             SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
             SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             Finished = false;
             FinishedTime = -1;
+        }
+
+        public void Accelerate()
+        {
+            if (CurrentSpeed < SaltedTopSpeed && CurrentStam != 0)
+                CurrentSpeed += SaltedAcceleration / StatDivisor;
+        }
+
+        public void Tire()
+        {
+            if (!Finished && CurrentStam != 0)
+                CurrentStam -= 3;
+            else 
+            {
+                CurrentSpeed -= (TenacityOffset - SaltedTenacity) / StatDivisor;
+                if (CurrentSpeed < MinimumSpeed)
+                    CurrentSpeed = MinimumSpeed;
+            }
+        }
+
+        public void Move(int time)
+        {
+            if (!Finished)
+            {
+                DistanceTravelled += CurrentSpeed / StatDivisor;
+                Coordinates = Track.getCoordinates(
+                    Coordinates.XCoord + (CurrentSpeed / StatDivisor),
+                    Coordinates.YCoord);
+                DistanceToFinish = (Coordinates == Track.FinishLine)
+                    ? DistanceToFinish - CurrentSpeed / StatDivisor : 
+                    Track.Length - Coordinates.XCoord;
+            }
+
+            if (Coordinates == Track.FinishLine && !Finished)
+            {
+                Finished = true;
+                FinishedTime = time;
+            }
         }
 
         public override string ToString()

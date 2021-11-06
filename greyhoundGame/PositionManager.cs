@@ -24,9 +24,9 @@ namespace greyhoundGame
         {
             var finishedHounds = from hound in hounds where (hound.Finished == true) select hound;
             var orderedFinishedHounds =
-                (finishedHounds.OrderBy(
-                    finishedHounds => finishedHounds.FinishedTime).ThenByDescending(
-                    finishedHounds => finishedHounds.DistanceTravelled));
+                finishedHounds.OrderBy(
+                    finishedHounds => finishedHounds.FinishedTime).ThenBy(
+                    finishedHounds => finishedHounds.DistanceToFinish);
             return orderedFinishedHounds.ToArray();
         }
 
@@ -34,8 +34,8 @@ namespace greyhoundGame
         {
             var runningHounds = from hound in hounds where (hound.Finished == false) select hound;
             var orderedRunningHounds =
-                (runningHounds.OrderByDescending(
-                    runningHounds => runningHounds.DistanceTravelled));
+                (runningHounds.OrderBy(
+                    runningHounds => runningHounds.DistanceToFinish));
 
             return orderedRunningHounds.ToArray();
         }
