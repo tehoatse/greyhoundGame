@@ -2,6 +2,8 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace greyhoundGame
 {
@@ -17,8 +19,7 @@ namespace greyhoundGame
         static void Main(string[] args)
         {
             Greyhound[] hounds = LoadHounds();
-
-
+            
             //SaveHounds(hounds);
 
             GreyhoundTrack track = new GreyhoundTrack();
@@ -46,19 +47,26 @@ namespace greyhoundGame
 
         public static void SaveHounds(Greyhound[] hounds)
         {
-            XmlSerializer write = new XmlSerializer(typeof(Greyhound[]));
-            FileStream file = System.IO.File.Create("greyhoundlist.xml");
-            write.Serialize(file, hounds);
+            var options = new JsonSerializerOptions { WriteIndented = true };
+            File.WriteAllText("greyhoundlist.json", JsonSerializer.Serialize(hounds, options));
 
+            //XmlSerializer write = new XmlSerializer(typeof(Greyhound[]));
+            //FileStream file = System.IO.File.Create("greyhoundlist.xml");
+            //write.Serialize(file, hounds);
         }
 
         public static Greyhound[] LoadHounds()
         {
-            XmlSerializer reader = new XmlSerializer(typeof(Greyhound[]));
-            StreamReader file = new StreamReader("greyhoundlist.xml");
-            Greyhound[] hounds = (Greyhound[])reader.Deserialize(file);
-            file.Close();
+
+            string jsonString = File.ReadAllText("greyhoundlist.json");
+            Greyhound[] hounds = JsonSerializer.Deserialize<Greyhound[]>(jsonString);
             return hounds;
+
+            //XmlSerializer reader = new XmlSerializer(typeof(Greyhound[]));
+            //StreamReader file = new StreamReader("greyhoundlist.xml");
+            //Greyhound[] hounds = (Greyhound[])reader.Deserialize(file);
+            //file.Close();
+            //return hounds;
         }
 
     }

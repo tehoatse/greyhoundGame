@@ -64,7 +64,7 @@ namespace greyhoundGame
             Greyhound = hound;
             CurrentSpeed = 0;
             DistanceTravelled = 0;
-            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt()) * 2;
+            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt());
             SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
             SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
@@ -103,10 +103,6 @@ namespace greyhoundGame
 
                 MoveTo(destination);
 
-                //Coordinates = Track.GetSquare(
-                //    Coordinates.XCoord + (CurrentSpeed / StatDivisor),
-                //    Coordinates.YCoord);
-
                 DistanceToFinish = (Coordinates == Track.FinishLine)
                     ? DistanceToFinish - CurrentSpeed / StatDivisor : 
                     Track.Length - Coordinates.XCoord;
@@ -126,16 +122,16 @@ namespace greyhoundGame
 
         private void MoveTo(RaceSquare destination)
         {
-            const int moveUp = -1;
-            const int moveDown = 1;
-            const int straight = 0;
+            const int MOVE_UP = -1;
+            const int MOVE_DOWN = 1;
+            const int STRAIGHT = 0;
             
-            int verticalMove = straight;
+            int verticalMove = STRAIGHT;
 
             if (destination.YCoord > Coordinates.YCoord)
-                verticalMove = moveDown;
+                verticalMove = MOVE_DOWN;
             if (destination.YCoord < Coordinates.YCoord)
-                verticalMove = moveUp;
+                verticalMove = MOVE_UP;
 
             int verticalMoveTimer = (destination.XCoord - Coordinates.XCoord) / 2;
             int verticalMoveCounter = 0;
