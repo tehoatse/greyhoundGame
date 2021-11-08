@@ -1,4 +1,6 @@
-﻿namespace greyhoundGame
+﻿using greyhoundGame.RaceEngine;
+
+namespace greyhoundGame
 {
     class Finisher
     {

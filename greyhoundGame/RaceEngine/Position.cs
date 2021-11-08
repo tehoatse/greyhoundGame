@@ -1,4 +1,4 @@
-﻿namespace greyhoundGame
+﻿namespace greyhoundGame.RaceEngine
 {
     class Position
     {

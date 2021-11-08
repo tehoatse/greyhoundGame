@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace greyhoundGame
+namespace greyhoundGame.RaceEngine
 {
     class RaceGreyhound
     {
@@ -138,12 +138,16 @@ namespace greyhoundGame
 
             while(Coordinates != destination)
             {
-                verticalMoveCounter++;
                 Coordinates.HasGreyhound = false;
+
                 if (verticalMoveTimer == verticalMoveCounter)
                     Coordinates = Track.GetSquare(Coordinates.XCoord, Coordinates.YCoord + verticalMove);
+
                 Coordinates = Track.GetSquare(Coordinates.XCoord + 1, Coordinates.YCoord);
+
                 Coordinates.HasGreyhound = true;
+
+                verticalMoveCounter++;
             }
         }
     }

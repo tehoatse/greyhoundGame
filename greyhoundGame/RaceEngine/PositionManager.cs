@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections;
 
-namespace greyhoundGame
+namespace greyhoundGame.RaceEngine
 {
     class PositionManager
     {
@@ -18,7 +18,44 @@ namespace greyhoundGame
             return AllocatePositions(GetFinishedHounds(hounds).Concat(GetRunningHounds(hounds)).ToArray());
         }
 
-#region private methods
+        #region private methods
+
+        private RaceGreyhound[] AllocatePositions(RaceGreyhound[] racingHounds)
+        {
+            var currentHound = racingHounds.First();
+            var finalHound = racingHounds.Last();
+            int skipPositionsCounter = 0;
+
+            foreach (var position in Positions)
+            {
+                if (skipPositionsCounter > 0)
+                {
+                    skipPositionsCounter--;
+                    continue;
+                }
+
+                currentHound.CurrentPosition = position;
+
+                if (currentHound == finalHound)
+                    return racingHounds;
+
+                var nextHound = GetNextHound(racingHounds, currentHound);
+
+                while (AreDogsTied(currentHound, nextHound))
+                {
+                    skipPositionsCounter++;
+                    nextHound.CurrentPosition = position;
+                    currentHound = nextHound;
+
+                    if (currentHound == finalHound)
+                        return racingHounds;
+
+                    nextHound = GetNextHound(racingHounds, currentHound);
+                }
+                currentHound = nextHound;
+            }
+            return racingHounds;
+        }
 
         private RaceGreyhound[] GetFinishedHounds(RaceGreyhound[] hounds)
         {
@@ -62,43 +99,6 @@ namespace greyhoundGame
                 return null;
 
             return houndList[houndIndex + 1];
-        }
-
-        private RaceGreyhound[] AllocatePositions(RaceGreyhound[] racingHounds)
-        {
-            var currentHound = racingHounds.First();
-            var finalHound = racingHounds.Last();
-            int skipPositionsCounter = 0;
-
-            foreach (var position in Positions)
-            {
-                if (skipPositionsCounter > 0)
-                {
-                    skipPositionsCounter--;
-                    continue;
-                }
-
-                currentHound.CurrentPosition = position;
-
-                if (currentHound == finalHound)
-                    return racingHounds;
-
-                var nextHound = GetNextHound(racingHounds, currentHound);
-
-                while (AreDogsTied(currentHound, nextHound))
-                {
-                    skipPositionsCounter++;
-                    nextHound.CurrentPosition = position;
-                    currentHound = nextHound;
-
-                    if (currentHound == finalHound)
-                        return racingHounds;
-
-                    nextHound = GetNextHound(racingHounds, currentHound);
-                }
-                currentHound = nextHound;
-            }
-            return racingHounds;
         }
     }
     #endregion

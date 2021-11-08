@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using greyhoundGame.RaceEngine;
 
 namespace greyhoundGame
 {
