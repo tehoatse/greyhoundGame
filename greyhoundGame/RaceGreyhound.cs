@@ -64,7 +64,7 @@ namespace greyhoundGame
             Greyhound = hound;
             CurrentSpeed = 0;
             DistanceTravelled = 0;
-            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt()) * 2;
+            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt());
             SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
             SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
@@ -92,12 +92,17 @@ namespace greyhoundGame
 
         public void Move(int time)
         {
+            RaceSquare destination;
+
             if (!Finished)
             {
                 DistanceTravelled += CurrentSpeed / StatDivisor;
-                Coordinates = Track.getCoordinates(
+                destination = Track.GetSquare(
                     Coordinates.XCoord + (CurrentSpeed / StatDivisor),
                     Coordinates.YCoord);
+
+                MoveTo(destination);
+
                 DistanceToFinish = (Coordinates == Track.FinishLine)
                     ? DistanceToFinish - CurrentSpeed / StatDivisor : 
                     Track.Length - Coordinates.XCoord;
@@ -113,6 +118,33 @@ namespace greyhoundGame
         public override string ToString()
         {
             return $"{Greyhound.Name} {CurrentPosition.Ordinal}";
+        }
+
+        private void MoveTo(RaceSquare destination)
+        {
+            const int MOVE_UP = -1;
+            const int MOVE_DOWN = 1;
+            const int STRAIGHT = 0;
+            
+            int verticalMove = STRAIGHT;
+
+            if (destination.YCoord > Coordinates.YCoord)
+                verticalMove = MOVE_DOWN;
+            if (destination.YCoord < Coordinates.YCoord)
+                verticalMove = MOVE_UP;
+
+            int verticalMoveTimer = (destination.XCoord - Coordinates.XCoord) / 2;
+            int verticalMoveCounter = 0;
+
+            while(Coordinates != destination)
+            {
+                verticalMoveCounter++;
+                Coordinates.HasGreyhound = false;
+                if (verticalMoveTimer == verticalMoveCounter)
+                    Coordinates = Track.GetSquare(Coordinates.XCoord, Coordinates.YCoord + verticalMove);
+                Coordinates = Track.GetSquare(Coordinates.XCoord + 1, Coordinates.YCoord);
+                Coordinates.HasGreyhound = true;
+            }
         }
     }
 

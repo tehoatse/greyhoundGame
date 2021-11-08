@@ -28,6 +28,8 @@
         public static string FitnessDesc = "How appropriate is this animal for its environment?";
         public static string Size = "Size";
         public static string SizeDesc = "How large is the greyhound. Large can be good, small can be better.";
+        public static string Intelligence = "Intelligence";
+        public static string IntelligenceDesc = "Can it make the right choices at the right times?";
 
         // ordinal numbers
         private static string First = "first";

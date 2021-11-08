@@ -34,7 +34,7 @@ namespace greyhoundGame
             foreach (var hound in raceHounds)
             {
                 hound.StartingBox = Array.IndexOf(raceHounds, hound);
-                hound.Coordinates = Track.getCoordinates(0, hound.StartingBox * RaceTrack.TrackSpacing);
+                hound.Coordinates = Track.GetSquare(0, hound.StartingBox * RaceTrack.TrackSpacing);
             }
                         
             while(raceGoing)
