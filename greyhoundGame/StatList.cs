@@ -19,6 +19,7 @@ namespace greyhoundGame
         public Stat Aggression { get; set; }
         public Stat Fitness { get; set; }
         public Stat Size { get; set; }
+        public Stat Intelligence { get; set; }
 
 
         // creates a set of stats defaulting to 1

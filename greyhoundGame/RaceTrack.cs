@@ -3,7 +3,7 @@
     public class RaceTrack
     {
         // hey loook
-        public static int TrackSpacing = 3;
+        public static int TrackSpacing = 1;
         public static int FinishLineX = -1;
         public static int FinishLineY = -1;
 
@@ -15,7 +15,6 @@
         private RaceSquare[,] PhysicalRaceTrack;
         public RaceSquare FinishLine { get; private set; }
 
-
         public RaceTrack(GreyhoundTrack track, int length, int boxes)
         {
             Venue = track;   
@@ -25,7 +24,7 @@
             FinishLine = new RaceSquare(FinishLineX, FinishLineY);
         }
 
-        public RaceSquare getCoordinates(int xCoord, int yCoord)
+        public RaceSquare GetSquare(int xCoord, int yCoord)
         {
             if (xCoord >= Length)
                 return FinishLine;
@@ -38,11 +37,11 @@
         {
             PhysicalRaceTrack = new RaceSquare[Length, Width];
 
-            for (int trackLength = 0; trackLength < Length; trackLength++)
+            for (int trackXCoord = 0; trackXCoord < Length; trackXCoord++)
             {
-                for (int trackWidth = 0; trackWidth < Width; trackWidth++)
+                for (int trackYCoord = 0; trackYCoord < Width; trackYCoord++)
                 {
-                    PhysicalRaceTrack[trackLength, trackWidth] = new RaceSquare(trackLength, trackWidth);
+                    PhysicalRaceTrack[trackXCoord, trackYCoord] = new RaceSquare(trackXCoord, trackYCoord);
                 }
             }
         }

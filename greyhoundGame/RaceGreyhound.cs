@@ -92,12 +92,21 @@ namespace greyhoundGame
 
         public void Move(int time)
         {
+            RaceSquare destination;
+
             if (!Finished)
             {
                 DistanceTravelled += CurrentSpeed / StatDivisor;
-                Coordinates = Track.getCoordinates(
+                destination = Track.GetSquare(
                     Coordinates.XCoord + (CurrentSpeed / StatDivisor),
                     Coordinates.YCoord);
+
+                MoveTo(destination);
+
+                //Coordinates = Track.GetSquare(
+                //    Coordinates.XCoord + (CurrentSpeed / StatDivisor),
+                //    Coordinates.YCoord);
+
                 DistanceToFinish = (Coordinates == Track.FinishLine)
                     ? DistanceToFinish - CurrentSpeed / StatDivisor : 
                     Track.Length - Coordinates.XCoord;
@@ -113,6 +122,33 @@ namespace greyhoundGame
         public override string ToString()
         {
             return $"{Greyhound.Name} {CurrentPosition.Ordinal}";
+        }
+
+        private void MoveTo(RaceSquare destination)
+        {
+            const int moveUp = -1;
+            const int moveDown = 1;
+            const int straight = 0;
+            
+            int verticalMove = straight;
+
+            if (destination.YCoord > Coordinates.YCoord)
+                verticalMove = moveDown;
+            if (destination.YCoord < Coordinates.YCoord)
+                verticalMove = moveUp;
+
+            int verticalMoveTimer = (destination.XCoord - Coordinates.XCoord) / 2;
+            int verticalMoveCounter = 0;
+
+            while(Coordinates != destination)
+            {
+                verticalMoveCounter++;
+                Coordinates.HasGreyhound = false;
+                if (verticalMoveTimer == verticalMoveCounter)
+                    Coordinates = Track.GetSquare(Coordinates.XCoord, Coordinates.YCoord + verticalMove);
+                Coordinates = Track.GetSquare(Coordinates.XCoord + 1, Coordinates.YCoord);
+                Coordinates.HasGreyhound = true;
+            }
         }
     }
 
