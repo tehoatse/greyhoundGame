@@ -2,7 +2,7 @@
 
 namespace greyhoundGame.RaceEngine
 {
-    class RaceGreyhound
+    public class RaceGreyhound
     {
         public static int StatDivisor = 3;
         public static int TenacityOffset = 125;
