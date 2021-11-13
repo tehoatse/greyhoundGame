@@ -12,7 +12,6 @@ namespace greyhoundGame.RaceEngine
             Hounds = hounds;
         }
 
-        
         public override string ToString()
         {
             string outString = "";

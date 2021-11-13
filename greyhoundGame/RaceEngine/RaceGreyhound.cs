@@ -4,9 +4,9 @@ namespace greyhoundGame.RaceEngine
 {
     public class RaceGreyhound
     {
-        public static int StatDivisor = 3;
-        public static int TenacityOffset = 125;
-        public static int MinimumSpeed = 5;
+        public static int STAT_DIVISOR = 3;
+        public static int TENACITY_OFFSET = 125;
+        public static int MINIMUM_SPEED = 5;
 
         public Greyhound Greyhound { get; private set; }
         public int CurrentSpeed { get; set; }
@@ -75,7 +75,7 @@ namespace greyhoundGame.RaceEngine
         public void Accelerate()
         {
             if (CurrentSpeed < SaltedTopSpeed && CurrentStam != 0)
-                CurrentSpeed += SaltedAcceleration / StatDivisor;
+                CurrentSpeed += SaltedAcceleration / STAT_DIVISOR;
         }
 
         public void Tire()
@@ -84,9 +84,9 @@ namespace greyhoundGame.RaceEngine
                 CurrentStam -= 3;
             else 
             {
-                CurrentSpeed -= (TenacityOffset - SaltedTenacity) / StatDivisor;
-                if (CurrentSpeed < MinimumSpeed)
-                    CurrentSpeed = MinimumSpeed;
+                CurrentSpeed -= (TENACITY_OFFSET - SaltedTenacity) / STAT_DIVISOR;
+                if (CurrentSpeed < MINIMUM_SPEED)
+                    CurrentSpeed = MINIMUM_SPEED;
             }
         }
 
@@ -96,15 +96,15 @@ namespace greyhoundGame.RaceEngine
 
             if (!Finished)
             {
-                DistanceTravelled += CurrentSpeed / StatDivisor;
+                DistanceTravelled += CurrentSpeed / STAT_DIVISOR;
                 destination = Track.GetSquare(
-                    Coordinates.XCoord + (CurrentSpeed / StatDivisor),
+                    Coordinates.XCoord + (CurrentSpeed / STAT_DIVISOR),
                     Coordinates.YCoord);
 
                 MoveTo(destination);
 
                 DistanceToFinish = (Coordinates == Track.FinishLine)
-                    ? DistanceToFinish - CurrentSpeed / StatDivisor : 
+                    ? DistanceToFinish - CurrentSpeed / STAT_DIVISOR : 
                     Track.Length - Coordinates.XCoord;
             }
 

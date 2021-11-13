@@ -13,6 +13,7 @@ namespace greyhoundGame.RaceEngine
         private RaceTrack Track { get; set; }
 
         private RaceGreyhound[] raceHounds;
+        private MovementManager raceMover;
 
 
         // how many ticks have gone
@@ -24,6 +25,8 @@ namespace greyhoundGame.RaceEngine
             RaceLength = distance;
             Track = new RaceTrack(venue, distance, greyhounds.Length);
             AddHounds(greyhounds, Track);
+            raceMover = new MovementManager(raceHounds);
+            
   
         }
 
@@ -61,16 +64,10 @@ namespace greyhoundGame.RaceEngine
             Console.WriteLine("\ntick");
             timePassed++;
             bool raceGoing = true;
-            
-            foreach (var hound in raceHounds)
-            {
-                if (!hound.Finished)
-                {
-                    hound.Accelerate();
-                    hound.Move(timePassed);
-                    hound.Tire();
-                }
-            }
+
+            AccelerateHounds();
+            raceMover.MovementGameTurn();
+            TireHounds();
            
             raceHounds = Positions.GetPositions(raceHounds);
             raceGoing = !raceHounds.All(hound => hound.Finished);
@@ -96,6 +93,23 @@ namespace greyhoundGame.RaceEngine
         private void ResultsDump(string dump)
         {
             File.AppendAllText("results.txt", dump);
+        }
+        private void AccelerateHounds()
+        {
+            foreach (var hound in raceHounds)
+            {
+                if (!hound.Finished)
+                    hound.Accelerate();
+            }
+        }
+
+        private void TireHounds()
+        {
+            foreach (var hound in raceHounds)
+            {
+                if (!hound.Finished)
+                    hound.Tire();
+            }
         }
     }
 

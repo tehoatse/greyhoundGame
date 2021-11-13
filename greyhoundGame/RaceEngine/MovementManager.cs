@@ -8,42 +8,48 @@ namespace greyhoundGame.RaceEngine
     class MovementManager
     {
         public RaceGreyhound[] Hounds { set; get; }
-        public RaceTrack Track { get; set; }
+        public MovementToken[] Movements { get; set; }
 
-        private int fastestHoundSpeed;
-        private double increment;
 
-        public MovementManager(RaceGreyhound[] hounds, RaceTrack track)
+        private int FASTEST_POSSIBLE_HOUND = 70;
+
+        public MovementManager(RaceGreyhound[] hounds)
         {
             Hounds = hounds;
-            Track = track;
         }
 
-        public void MoveHounds()
+        public void MovementGameTurn()
         {
-            fastestHoundSpeed = GetFastestHoundSpeed();
-            increment = 1 / (double)fastestHoundSpeed;
-            
-            int counter = 0;
-             
-            foreach(var hound in hounds)
-            {
-
-            }
-
-            // so for each count on the counter
-
-            foreach(var hound in Hounds)
-            {
-                
-            
-            }
-
+            CreateMovementTokens();
+            for (int counter = 0; counter < FASTEST_POSSIBLE_HOUND; counter++)
+                AdvanceRace();
         }
 
-        private int GetFastestHoundSpeed()
+        private void CreateMovementTokens()
         {
-            return Hounds.Max(hound => hound.CurrentSpeed);
+            foreach (RaceGreyhound hound in Hounds)
+            {
+                Movements[Array.IndexOf(Hounds, hound)] = 
+                    new MovementToken(hound, 
+                    FASTEST_POSSIBLE_HOUND);
+            }
+        }
+
+        private void AdvanceRace()
+        {
+            foreach (var potentialPace in Movements)
+            {
+                bool shouldHoundMove = potentialPace.CountIncrement();
+                if (shouldHoundMove)
+                    MovePace(potentialPace.Hound);
+            }
+        }
+
+        private void MovePace(RaceGreyhound hound)
+        {
+            hound.Coordinates.HasGreyhound = false;
+            hound.Coordinates.XCoord++;
+            hound.Coordinates.HasGreyhound = true;
         }
     }
 }
