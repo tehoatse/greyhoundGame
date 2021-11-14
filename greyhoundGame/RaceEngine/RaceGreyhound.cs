@@ -90,6 +90,21 @@ namespace greyhoundGame.RaceEngine
             }
         }
 
+        public void UpdatePosition(int time, MovementDirection movementDirection)
+        {
+            if(!Finished)
+            {
+                Coordinates = Track.GetSquare(movementDirection, Coordinates);
+            }
+
+            if (Coordinates == Track.FinishLine && !Finished)
+            {
+                Finished = true;
+                FinishedTime = time;
+            }
+
+        }
+
         public void Move(int time)
         {
             RaceSquare destination;
@@ -108,11 +123,7 @@ namespace greyhoundGame.RaceEngine
                     Track.Length - Coordinates.XCoord;
             }
 
-            if (Coordinates == Track.FinishLine && !Finished)
-            {
-                Finished = true;
-                FinishedTime = time;
-            }
+
         }
 
         public override string ToString()

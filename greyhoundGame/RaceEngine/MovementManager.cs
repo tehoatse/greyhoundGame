@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
 
 namespace greyhoundGame.RaceEngine
 {
@@ -10,16 +7,18 @@ namespace greyhoundGame.RaceEngine
         public RaceGreyhound[] Hounds { set; get; }
         public MovementToken[] Movements { get; set; }
 
+        private int timePassedInRace;
 
-        private int FASTEST_POSSIBLE_HOUND = 70;
+        private const int FASTEST_POSSIBLE_HOUND = 70;
 
         public MovementManager(RaceGreyhound[] hounds)
         {
             Hounds = hounds;
         }
 
-        public void MovementGameTurn()
+        public void MovementGameTurn(int time)
         {
+            timePassedInRace = time;
             CreateMovementTokens();
             for (int counter = 0; counter < FASTEST_POSSIBLE_HOUND; counter++)
                 AdvanceRace();
@@ -27,6 +26,7 @@ namespace greyhoundGame.RaceEngine
 
         private void CreateMovementTokens()
         {
+            Movements = new MovementToken[Hounds.Length];
             foreach (RaceGreyhound hound in Hounds)
             {
                 Movements[Array.IndexOf(Hounds, hound)] = 
@@ -41,7 +41,7 @@ namespace greyhoundGame.RaceEngine
             {
                 bool shouldHoundMove = potentialPace.CountIncrement();
                 if (shouldHoundMove)
-                    MovePace(potentialPace.Hound);
+                    potentialPace.Hound.UpdatePosition(timePassedInRace, potentialPace.Direction);
             }
         }
 

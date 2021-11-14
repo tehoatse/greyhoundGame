@@ -26,8 +26,6 @@ namespace greyhoundGame.RaceEngine
             Track = new RaceTrack(venue, distance, greyhounds.Length);
             AddHounds(greyhounds, Track);
             raceMover = new MovementManager(raceHounds);
-            
-  
         }
 
         public Results Start()
@@ -66,7 +64,7 @@ namespace greyhoundGame.RaceEngine
             bool raceGoing = true;
 
             AccelerateHounds();
-            raceMover.MovementGameTurn();
+            raceMover.MovementGameTurn(timePassed);
             TireHounds();
            
             raceHounds = Positions.GetPositions(raceHounds);
