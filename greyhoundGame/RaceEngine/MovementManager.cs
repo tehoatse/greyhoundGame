@@ -45,11 +45,5 @@ namespace greyhoundGame.RaceEngine
             }
         }
 
-        private void MovePace(RaceGreyhound hound)
-        {
-            hound.Coordinates.HasGreyhound = false;
-            hound.Coordinates.XCoord++;
-            hound.Coordinates.HasGreyhound = true;
-        }
     }
 }

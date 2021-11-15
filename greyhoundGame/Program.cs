@@ -27,7 +27,7 @@ namespace greyhoundGame
             track.TrackDescription = "A racetrack";
             track.TrackName = "TRACK";
 
-            Race testRace = new Race(hounds, track, 500);
+            Race testRace = new Race(hounds, track, 100);
 
             Console.WriteLine(testRace.Start().ToString());
 
