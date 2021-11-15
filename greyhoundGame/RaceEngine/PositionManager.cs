@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections;
 
-namespace greyhoundGame
+namespace greyhoundGame.RaceEngine
 {
     class PositionManager
     {
@@ -18,51 +18,7 @@ namespace greyhoundGame
             return AllocatePositions(GetFinishedHounds(hounds).Concat(GetRunningHounds(hounds)).ToArray());
         }
 
-#region private methods
-
-        private RaceGreyhound[] GetFinishedHounds(RaceGreyhound[] hounds)
-        {
-            var finishedHounds = from hound in hounds where (hound.Finished == true) select hound;
-            var orderedFinishedHounds =
-                finishedHounds.OrderBy(
-                    finishedHounds => finishedHounds.FinishedTime).ThenBy(
-                    finishedHounds => finishedHounds.DistanceToFinish);
-            return orderedFinishedHounds.ToArray();
-        }
-
-        private RaceGreyhound[] GetRunningHounds(RaceGreyhound[] hounds)
-        {
-            var runningHounds = from hound in hounds where (hound.Finished == false) select hound;
-            var orderedRunningHounds =
-                (runningHounds.OrderBy(
-                    runningHounds => runningHounds.DistanceToFinish));
-
-            return orderedRunningHounds.ToArray();
-        }
-
-        private bool AreDogsTied(RaceGreyhound currentHound, RaceGreyhound nextHound)
-        {
-            if (!currentHound.Finished && 
-                !nextHound.Finished &&
-                currentHound.DistanceToFinish == nextHound.DistanceToFinish)
-                return true;
-            if (!currentHound.Finished)
-                return false;
-            if (currentHound.FinishedTime == nextHound.FinishedTime &&
-                currentHound.DistanceTravelled == nextHound.DistanceTravelled)
-                return true;
-            return false;
-        }
-
-        private RaceGreyhound GetNextHound(RaceGreyhound[] houndList, RaceGreyhound hound)
-        {
-            int houndIndex = Array.IndexOf(houndList, hound);
-
-            if (houndIndex >= houndList.Length)
-                return null;
-
-            return houndList[houndIndex + 1];
-        }
+        #region private methods
 
         private RaceGreyhound[] AllocatePositions(RaceGreyhound[] racingHounds)
         {
@@ -99,6 +55,50 @@ namespace greyhoundGame
                 currentHound = nextHound;
             }
             return racingHounds;
+        }
+
+        private RaceGreyhound[] GetFinishedHounds(RaceGreyhound[] hounds)
+        {
+            var finishedHounds = from hound in hounds where (hound.Finished == true) select hound;
+            var orderedFinishedHounds =
+                finishedHounds.OrderBy(
+                    finishedHounds => finishedHounds.FinishedTime).ThenByDescending(
+                    finishedHounds => finishedHounds.LocationLastTurn.XCoord);
+            return orderedFinishedHounds.ToArray();
+        }
+
+        private RaceGreyhound[] GetRunningHounds(RaceGreyhound[] hounds)
+        {
+            var runningHounds = from hound in hounds where (hound.Finished == false) select hound;
+            var orderedRunningHounds =
+                (runningHounds.OrderBy(
+                    runningHounds => runningHounds.DistanceToFinish));
+
+            return orderedRunningHounds.ToArray();
+        }
+
+        private bool AreDogsTied(RaceGreyhound currentHound, RaceGreyhound nextHound)
+        {
+            if (!currentHound.Finished && 
+                !nextHound.Finished &&
+                currentHound.DistanceToFinish == nextHound.DistanceToFinish)
+                return true;
+            if (!currentHound.Finished)
+                return false;
+            if (currentHound.FinishedTime == nextHound.FinishedTime &&
+                currentHound.LocationLastTurn.XCoord == nextHound.LocationLastTurn.XCoord)
+                return true;
+            return false;
+        }
+
+        private RaceGreyhound GetNextHound(RaceGreyhound[] houndList, RaceGreyhound hound)
+        {
+            int houndIndex = Array.IndexOf(houndList, hound);
+
+            if (houndIndex >= houndList.Length)
+                return null;
+
+            return houndList[houndIndex + 1];
         }
     }
     #endregion

@@ -1,6 +1,6 @@
-﻿namespace greyhoundGame
+﻿namespace greyhoundGame.RaceEngine
 {
-    class Position
+    public class Position
     {
         public int Number { get; set; }
         public string Ordinal { get; set; }

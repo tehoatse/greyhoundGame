@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace greyhoundGame
+namespace greyhoundGame.RaceEngine
 {
     class Results
     {
@@ -12,7 +12,6 @@ namespace greyhoundGame
             Hounds = hounds;
         }
 
-        
         public override string ToString()
         {
             string outString = "";

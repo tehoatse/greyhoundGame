@@ -1,27 +1,39 @@
 ﻿using System;
 
-namespace greyhoundGame
+namespace greyhoundGame.RaceEngine
 {
-    class RaceGreyhound
+    public class RaceGreyhound
     {
-        public static int StatDivisor = 5;
-        public static int TenacityOffset = 125;
-        public static int MinimumSpeed = 5;
+
+        public static int PER_TURN_STAMINA_REDUCTION = 2;
+        public static int STAT_DIVISOR = 3;
+        public static int TENACITY_OFFSET = 125;
+        public static int MINIMUM_SPEED = 5;
 
         public Greyhound Greyhound { get; private set; }
         public int CurrentSpeed { get; set; }
-        public int CurrentStam { get; set; }
+        public int CurrentStam { get; private set; }
         public int SaltedTopSpeed { get; private set; }
         public int SaltedTenacity { get; private set; }
         public int SaltedAcceleration { get; private set; }
         public int DistanceTravelled { get; set; }
-        public int DistanceToFinish { get; set; }
+        public int TimeLastTurn { get; private set; }
         public bool Finished { get; set; }
         public int FinishedTime { get; set; }
         public Position CurrentPosition { get; set; }
+        public RaceSquare LocationLastTurn { get; private set; }
         public RaceSquare Coordinates { get; set;}
         public RaceTrack Track { get; set; }
         public int StartingBox { get; set; }
+        public int DistanceToFinish
+        {
+            get
+            {
+                if (Coordinates == Track.FinishLine)
+                    return 0;
+                return Track.Length - Coordinates.XCoord;
+            }
+        }
 
         public RaceGreyhound(Greyhound hound)
         {
@@ -32,7 +44,6 @@ namespace greyhoundGame
         {
             BuildHound(hound);
             Track = track;
-            DistanceToFinish = track.Length;
         }
 
         // generating a modifier to make thing random
@@ -64,87 +75,60 @@ namespace greyhoundGame
             Greyhound = hound;
             CurrentSpeed = 0;
             DistanceTravelled = 0;
+            TimeLastTurn = 0;
             CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt());
             SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
             SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
             SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
-            Finished = false;
+            Finished = false;                                                                          
             FinishedTime = -1;
         }
 
         public void Accelerate()
         {
             if (CurrentSpeed < SaltedTopSpeed && CurrentStam != 0)
-                CurrentSpeed += SaltedAcceleration / StatDivisor;
+                CurrentSpeed += SaltedAcceleration / STAT_DIVISOR;
         }
 
         public void Tire()
         {
-            if (!Finished && CurrentStam != 0)
-                CurrentStam -= 3;
+            if (!Finished && CurrentStam > 0)
+                CurrentStam -= PER_TURN_STAMINA_REDUCTION;
             else 
             {
-                CurrentSpeed -= (TenacityOffset - SaltedTenacity) / StatDivisor;
-                if (CurrentSpeed < MinimumSpeed)
-                    CurrentSpeed = MinimumSpeed;
+                CurrentStam = 0;
+                CurrentSpeed -= (TENACITY_OFFSET - SaltedTenacity) / STAT_DIVISOR;
+                
+                if (CurrentSpeed < MINIMUM_SPEED)
+                    CurrentSpeed = MINIMUM_SPEED;
             }
         }
 
-        public void Move(int time)
+        public void UpdatePosition(int time, MovementDirection movementDirection)
         {
-            RaceSquare destination;
-
-            if (!Finished)
+            if(time > TimeLastTurn && !Finished)
             {
-                DistanceTravelled += CurrentSpeed / StatDivisor;
-                destination = Track.GetSquare(
-                    Coordinates.XCoord + (CurrentSpeed / StatDivisor),
-                    Coordinates.YCoord);
+                LocationLastTurn = Coordinates;
+                TimeLastTurn = time;
+            }
 
-                MoveTo(destination);
-
-                DistanceToFinish = (Coordinates == Track.FinishLine)
-                    ? DistanceToFinish - CurrentSpeed / StatDivisor : 
-                    Track.Length - Coordinates.XCoord;
+            if(!Finished)
+            {
+                Coordinates = Track.GetSquare(movementDirection, Coordinates);
             }
 
             if (Coordinates == Track.FinishLine && !Finished)
             {
+                
                 Finished = true;
                 FinishedTime = time;
             }
+
         }
 
         public override string ToString()
         {
             return $"{Greyhound.Name} {CurrentPosition.Ordinal}";
-        }
-
-        private void MoveTo(RaceSquare destination)
-        {
-            const int MOVE_UP = -1;
-            const int MOVE_DOWN = 1;
-            const int STRAIGHT = 0;
-            
-            int verticalMove = STRAIGHT;
-
-            if (destination.YCoord > Coordinates.YCoord)
-                verticalMove = MOVE_DOWN;
-            if (destination.YCoord < Coordinates.YCoord)
-                verticalMove = MOVE_UP;
-
-            int verticalMoveTimer = (destination.XCoord - Coordinates.XCoord) / 2;
-            int verticalMoveCounter = 0;
-
-            while(Coordinates != destination)
-            {
-                verticalMoveCounter++;
-                Coordinates.HasGreyhound = false;
-                if (verticalMoveTimer == verticalMoveCounter)
-                    Coordinates = Track.GetSquare(Coordinates.XCoord, Coordinates.YCoord + verticalMove);
-                Coordinates = Track.GetSquare(Coordinates.XCoord + 1, Coordinates.YCoord);
-                Coordinates.HasGreyhound = true;
-            }
         }
     }
 

@@ -3,17 +3,61 @@ using System.IO;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace greyhoundGame
+namespace greyhoundGame.RaceEngine
 {
     class Race
     {
-                
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
+        private const int tenacityOffset = 125;
+        private const int statDivisor = 5; // some stats need to be divided by five to work with
+        
+
+        // greyhounds run a race, lets see who's the fastest!
+        // the greyhounds in the race
         public Greyhound[] Greyhounds { get; private set; }
         public int RaceLength { get; private set; }
         public PositionManager Positions { get; set; }
 
         private RaceTrack Track { get; set; }
         private RaceGreyhound[] raceHounds;
+
+
+        // how many ticks have gone
         private int timePassed = 0;
 
         public Race(Greyhound[] greyhounds, GreyhoundTrack venue, int distance)
@@ -22,7 +66,7 @@ namespace greyhoundGame
             RaceLength = distance;
             Track = new RaceTrack(venue, distance, greyhounds.Length);
             AddHounds(greyhounds, Track);
-  
+            raceMover = new MovementManager(raceHounds);
         }
 
         public Results Start()
@@ -59,16 +103,10 @@ namespace greyhoundGame
             Console.WriteLine("\ntick");
             timePassed++;
             bool raceGoing = true;
-            
-            foreach (var hound in raceHounds)
-            {
-                if (!hound.Finished)
-                {
-                    hound.Accelerate();
-                    hound.Move(timePassed);
-                    hound.Tire();
-                }
-            }
+
+            AccelerateHounds();
+            raceMover.MovementGameTurn(timePassed);
+            TireHounds();
            
             raceHounds = Positions.GetPositions(raceHounds);
             raceGoing = !raceHounds.All(hound => hound.Finished);
@@ -94,6 +132,23 @@ namespace greyhoundGame
         private void ResultsDump(string dump)
         {
             File.AppendAllText("results.txt", dump);
+        }
+        private void AccelerateHounds()
+        {
+            foreach (var hound in raceHounds)
+            {
+                if (!hound.Finished)
+                    hound.Accelerate();
+            }
+        }
+
+        private void TireHounds()
+        {
+            foreach (var hound in raceHounds)
+            {
+                if (!hound.Finished)
+                    hound.Tire();
+            }
         }
     }
 
