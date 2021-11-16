@@ -4,19 +4,38 @@ namespace greyhoundGame.RaceEngine
 {
     public class RaceGreyhound
     {
+        private const int PER_TURN_STAMINA_REDUCTION = 2;
+        private const int STAT_DIVISOR = 3;
+        private const int TENACITY_OFFSET = 125;
+        private const int MINIMUM_SPEED = 5;
 
-        public static int PER_TURN_STAMINA_REDUCTION = 2;
-        public static int STAT_DIVISOR = 3;
-        public static int TENACITY_OFFSET = 125;
-        public static int MINIMUM_SPEED = 5;
+        private int _saltedAcceleration;
+        private int _accelerationWobble;
+        private int _currentSpeed;
+        private int _speedWobble;
+        private int _saltedTenacity;
+        private int _tenacityWobble;
+
+        private int SaltedTopSpeed { get; set; }
 
         public Greyhound Greyhound { get; private set; }
-        public int CurrentSpeed { get; set; }
-        public int CurrentStam { get; private set; }
-        public int SaltedTopSpeed { get; private set; }
-        public int SaltedTenacity { get; private set; }
-        public int SaltedAcceleration { get; private set; }
-        public int DistanceTravelled { get; set; }
+        
+        public int CurrentSpeed 
+        {
+            get => (_currentSpeed + _speedWobble) /STAT_DIVISOR;
+            private set => _currentSpeed = value; 
+        }
+        private int SaltedTenacity 
+        { 
+            get => _saltedTenacity + _tenacityWobble;
+            set => _saltedTenacity = value; 
+        }
+        private int SaltedAcceleration {
+            get => _saltedAcceleration + _accelerationWobble; 
+            set => _saltedAcceleration = value; 
+        }
+
+        public int CurrentStam { get; set; }
         public int TimeLastTurn { get; private set; }
         public bool Finished { get; set; }
         public int FinishedTime { get; set; }
@@ -73,8 +92,7 @@ namespace greyhoundGame.RaceEngine
         private void BuildHound(Greyhound hound)
         {
             Greyhound = hound;
-            CurrentSpeed = 0;
-            DistanceTravelled = 0;
+            _currentSpeed = 0;
             TimeLastTurn = 0;
             CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt());
             SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
@@ -86,8 +104,8 @@ namespace greyhoundGame.RaceEngine
 
         public void Accelerate()
         {
-            if (CurrentSpeed < SaltedTopSpeed && CurrentStam != 0)
-                CurrentSpeed += SaltedAcceleration / STAT_DIVISOR;
+            if (_currentSpeed < SaltedTopSpeed && CurrentStam != 0)
+                _currentSpeed += SaltedAcceleration / STAT_DIVISOR;
         }
 
         public void Tire()
@@ -106,30 +124,51 @@ namespace greyhoundGame.RaceEngine
 
         public void UpdatePosition(int time, MovementDirection movementDirection)
         {
-            if(time > TimeLastTurn && !Finished)
-            {
-                LocationLastTurn = Coordinates;
-                TimeLastTurn = time;
-            }
+            UpdateLocationLastTurn(time);
 
             if(!Finished)
-            {
                 Coordinates = Track.GetSquare(movementDirection, Coordinates);
-            }
 
             if (Coordinates == Track.FinishLine && !Finished)
             {
-                
                 Finished = true;
                 FinishedTime = time;
             }
-
+        }
+        
+        public float GetIncrement(float fastestHoundPace)
+        {
+            return fastestHoundPace / CurrentSpeed;
         }
 
         public override string ToString()
         {
             return $"{Greyhound.Name} {CurrentPosition.Ordinal}";
         }
+
+        private void UpdateLocationLastTurn(int timeNow)
+        {
+            if (timeNow > TimeLastTurn && !Finished)
+            {
+                LocationLastTurn = Coordinates;
+                TimeLastTurn = timeNow;
+            }
+        }
+
+        public void WobbleStats()
+        {
+            _accelerationWobble = StatWobble();
+            _speedWobble = StatWobble();
+            _tenacityWobble = StatWobble();
+        }
+
+        private int StatWobble()
+        {
+            Random dice = new Random();
+            return dice.Next(-15, 16);
+        }
+
+
     }
 
 }

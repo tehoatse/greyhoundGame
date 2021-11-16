@@ -2,30 +2,31 @@
 {
     public class MovementToken
     {
+        // the hound increment measures how fast a hound moves in relation to the fastest possible hound
+        // smaller is faster as it moves more often
 
-        public double HoundIncrement { get; set; }
-        public RaceGreyhound Hound { get; set; }
+        private float HoundIncrement { get; set; }
+        private RaceGreyhound Hound { get; set; }
         private double paceCount;
         public MovementDirection Direction {get ; set;} 
 
-        public MovementToken(RaceGreyhound hound, double fastestHoundPace)
+        public MovementToken(RaceGreyhound hound, float fastestHoundPace)
         {
             Hound = hound;
-            HoundIncrement = 
-                fastestHoundPace / ((double)Hound.CurrentSpeed/RaceGreyhound.STAT_DIVISOR);
+            HoundIncrement = Hound.GetIncrement(fastestHoundPace);
             paceCount = 0;
             Direction = MovementDirection.FORWARD;
         }
 
-        public bool CountIncrement()
+        public void UpdatePace(int time)
         {
             paceCount++;
             if (paceCount >= HoundIncrement)
             {
                 paceCount -= HoundIncrement;
-                return true;
+                Hound.UpdatePosition(time, Direction);
             }
-            return false;
         }
+
     }
 }

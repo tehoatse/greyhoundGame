@@ -59,6 +59,7 @@ namespace greyhoundGame.RaceEngine
 
         private bool Tick()
         {
+            WobbleHoundStatistics();
             Console.WriteLine("\ntick");
             timePassed++;
             bool raceGoing = true;
@@ -108,6 +109,12 @@ namespace greyhoundGame.RaceEngine
                 if (!hound.Finished)
                     hound.Tire();
             }
+        }
+
+        private void WobbleHoundStatistics()
+        {
+            foreach (var hound in raceHounds)
+                hound.WobbleStats();
         }
     }
 
