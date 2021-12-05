@@ -33,18 +33,12 @@ namespace greyhoundGame.RaceEngine
             bool raceGoing = true;
             var results = new Results(raceHounds);
 
-            
-            foreach (var hound in raceHounds)
-            {
-                hound.StartingBox = Array.IndexOf(raceHounds, hound);
-                hound.Coordinates = Track.GetSquare(0, hound.StartingBox * RaceTrack.TrackSpacing);
-            }
-                        
-            while(raceGoing)
+            GetHoundsToStartingPositions();
+
+            while (raceGoing)
             {
                 raceGoing = Tick();
             }
-
             return results;
         }
 
@@ -116,6 +110,15 @@ namespace greyhoundGame.RaceEngine
             foreach (var hound in raceHounds)
                 hound.WobbleStats();
         }
+
+        private void GetHoundsToStartingPositions()
+        {
+            foreach (var hound in raceHounds)
+            {
+                hound.StartingBox = Array.IndexOf(raceHounds, hound);
+                hound.Coordinates = Track.GetSquare(0, Math.Abs((hound.StartingBox * RaceTrack.TrackSpacing) - Track.TrackWidth));
+            }
+        }           
     }
 
 

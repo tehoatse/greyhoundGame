@@ -23,6 +23,5 @@ namespace greyhoundGame.RaceEngine
             return outString;
         }
 
-
     }
 }

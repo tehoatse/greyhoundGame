@@ -3,8 +3,12 @@
     public enum MovementDirection
     {
         UP,
+        UP_FORWARD,
         FORWARD,
+        DOWN_FORWARD,
         DOWN,
-        BACKWARD
+        DOW_BACKWARD,
+        BACKWARD,
+        UP_BACKWARD,
     }
 }
