@@ -167,8 +167,6 @@ namespace greyhoundGame.RaceEngine
             Random dice = new Random();
             return dice.Next(-15, 16);
         }
-
-
     }
 
 }

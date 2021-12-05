@@ -2,11 +2,9 @@
 {
     public class RaceTrack
     {
-        
         public static int TrackSpacing = 1;
         public static int FinishLineX = -1;
         public static int FinishLineY = -1;
-
         
         public int TrackWidth { get; private set; }
         public GreyhoundTrack Venue { get; private set; }

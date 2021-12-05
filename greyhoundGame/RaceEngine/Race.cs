@@ -10,10 +10,11 @@ namespace greyhoundGame.RaceEngine
         public Greyhound[] Greyhounds { get; private set; }
         public int RaceLength { get; private set; }
         public PositionManager Positions { get; set; }
-        private RaceTrack Track { get; set; }
+        private RaceTrack _track { get; set; }
 
         private RaceGreyhound[] raceHounds;
         private MovementManager raceMover;
+        private Marshal _marshal;
 
 
         // how many ticks have gone
@@ -23,9 +24,12 @@ namespace greyhoundGame.RaceEngine
         {
             Positions = new PositionManager(greyhounds.Length);
             RaceLength = distance;
-            Track = new RaceTrack(venue, distance, greyhounds.Length);
-            AddHounds(greyhounds, Track);
+            _track = new RaceTrack(venue, distance, greyhounds.Length);
+            AddHounds(greyhounds, _track);
+            _marshal = new Marshal(raceHounds, _track);
             raceMover = new MovementManager(raceHounds);
+            
+            
         }
 
         public Results Start()
@@ -116,7 +120,7 @@ namespace greyhoundGame.RaceEngine
             foreach (var hound in raceHounds)
             {
                 hound.StartingBox = Array.IndexOf(raceHounds, hound);
-                hound.Coordinates = Track.GetSquare(0, Math.Abs((hound.StartingBox * RaceTrack.TrackSpacing) - Track.TrackWidth));
+                hound.Coordinates = _track.GetSquare(0, Math.Abs((hound.StartingBox * RaceTrack.TrackSpacing) - _track.TrackWidth));
             }
         }           
     }

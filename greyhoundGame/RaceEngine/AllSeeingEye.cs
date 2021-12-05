@@ -7,10 +7,13 @@ namespace greyhoundGame.RaceEngine
     internal class AllSeeingEye
     {
         public List<HoundRadar> Radar{ get; set; }
+        private Marshal _marshal;
 
-        public AllSeeingEye(RaceGreyhound[] hounds)
+        public AllSeeingEye(Marshal marshal)
         {
-            foreach(var hound in hounds)
+            _marshal = marshal;
+
+            foreach(var hound in _marshal.getHounds())
             {
                 Radar.Add(new HoundRadar(hound));
             }
