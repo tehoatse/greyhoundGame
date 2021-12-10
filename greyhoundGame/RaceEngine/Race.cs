@@ -52,10 +52,11 @@ namespace greyhoundGame.RaceEngine
         public Greyhound[] Greyhounds { get; private set; }
         public int RaceLength { get; private set; }
         public PositionManager Positions { get; set; }
+        private RaceTrack _track { get; set; }
 
-        private RaceTrack Track { get; set; }
         private RaceGreyhound[] raceHounds;
-
+        private MovementManager raceMover;
+        private Marshal _marshal;
 
         // how many ticks have gone
         private int timePassed = 0;
@@ -64,8 +65,9 @@ namespace greyhoundGame.RaceEngine
         {
             Positions = new PositionManager(greyhounds.Length);
             RaceLength = distance;
-            Track = new RaceTrack(venue, distance, greyhounds.Length);
-            AddHounds(greyhounds, Track);
+            _track = new RaceTrack(venue, distance, greyhounds.Length);
+            AddHounds(greyhounds, _track);
+            _marshal = new Marshal(raceHounds, _track);
             raceMover = new MovementManager(raceHounds);
         }
 
@@ -74,18 +76,12 @@ namespace greyhoundGame.RaceEngine
             bool raceGoing = true;
             var results = new Results(raceHounds);
 
-            
-            foreach (var hound in raceHounds)
-            {
-                hound.StartingBox = Array.IndexOf(raceHounds, hound);
-                hound.Coordinates = Track.GetSquare(0, hound.StartingBox * RaceTrack.TrackSpacing);
-            }
-                        
-            while(raceGoing)
+            GetHoundsToStartingPositions();
+
+            while (raceGoing)
             {
                 raceGoing = Tick();
             }
-
             return results;
         }
 
@@ -100,6 +96,7 @@ namespace greyhoundGame.RaceEngine
 
         private bool Tick()
         {
+            WobbleHoundStatistics();
             Console.WriteLine("\ntick");
             timePassed++;
             bool raceGoing = true;
@@ -150,6 +147,21 @@ namespace greyhoundGame.RaceEngine
                     hound.Tire();
             }
         }
+
+        private void WobbleHoundStatistics()
+        {
+            foreach (var hound in raceHounds)
+                hound.WobbleStats();
+        }
+
+        private void GetHoundsToStartingPositions()
+        {
+            foreach (var hound in raceHounds)
+            {
+                hound.StartingBox = Array.IndexOf(raceHounds, hound);
+                hound.Coordinates = _track.GetSquare(0, Math.Abs((hound.StartingBox * RaceTrack.TrackSpacing) - _track.TrackWidth));
+            }
+        }           
     }
 
 

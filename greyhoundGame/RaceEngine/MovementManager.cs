@@ -4,12 +4,13 @@ namespace greyhoundGame.RaceEngine
 {
     class MovementManager
     {
+        // a token is created for each hound every game 'turn'
         public RaceGreyhound[] Hounds { set; get; }
         public MovementToken[] Movements { get; set; }
 
         private int timePassedInRace;
 
-        private const int FASTEST_POSSIBLE_HOUND = 70;
+        private const float FASTEST_POSSIBLE_HOUND = 70f;
 
         public MovementManager(RaceGreyhound[] hounds)
         {
@@ -21,7 +22,7 @@ namespace greyhoundGame.RaceEngine
             timePassedInRace = time;
             CreateMovementTokens();
             for (int counter = 0; counter < FASTEST_POSSIBLE_HOUND; counter++)
-                AdvanceRace();
+                UpdateTokens();
         }
 
         private void CreateMovementTokens()
@@ -29,19 +30,15 @@ namespace greyhoundGame.RaceEngine
             Movements = new MovementToken[Hounds.Length];
             foreach (RaceGreyhound hound in Hounds)
             {
-                Movements[Array.IndexOf(Hounds, hound)] = 
-                    new MovementToken(hound, 
-                    FASTEST_POSSIBLE_HOUND);
+                Movements[Array.IndexOf(Hounds, hound)] = new MovementToken(hound, FASTEST_POSSIBLE_HOUND);
             }
         }
 
-        private void AdvanceRace()
+        private void UpdateTokens()
         {
             foreach (var potentialPace in Movements)
             {
-                bool shouldHoundMove = potentialPace.CountIncrement();
-                if (shouldHoundMove)
-                    potentialPace.Hound.UpdatePosition(timePassedInRace, potentialPace.Direction);
+                potentialPace.UpdatePace(timePassedInRace);
             }
         }
 

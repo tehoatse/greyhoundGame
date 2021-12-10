@@ -2,23 +2,23 @@
 {
     public class RaceTrack
     {
-        
         public static int TrackSpacing = 1;
         public static int FinishLineX = -1;
         public static int FinishLineY = -1;
-
-        public int Width { get; private set; }
+        
+        public int TrackWidth { get; private set; }
         public GreyhoundTrack Venue { get; private set; }
        
         public int Length { get; private set; }
 
         private RaceSquare[,] PhysicalRaceTrack;
         public RaceSquare FinishLine { get; private set; }
+        public RaceSquare OutOfBounds { get; private set; }
 
         public RaceTrack(GreyhoundTrack track, int length, int boxes)
         {
             Venue = track;   
-            Width = boxes * TrackSpacing;
+            TrackWidth = boxes * TrackSpacing;
             Length = length;
             CreateTrack();
             FinishLine = new RaceSquare(FinishLineX, FinishLineY);
@@ -32,8 +32,8 @@
                 return FinishLine;
             if (yCoord < 0)
                 return PhysicalRaceTrack[xCoord, 0];
-            if (yCoord >= Width)
-                return PhysicalRaceTrack[xCoord, Width - 1];
+            if (yCoord >= TrackWidth)
+                return PhysicalRaceTrack[xCoord, TrackWidth - 1];
             return PhysicalRaceTrack[xCoord, yCoord];
         }
 
@@ -41,9 +41,11 @@
         {
             return direction switch
             {
-                MovementDirection.UP => GetSquare(currentSquare.XCoord, currentSquare.YCoord - 1),
+                MovementDirection.UP => GetSquare(currentSquare.XCoord, currentSquare.YCoord + 1),
+                MovementDirection.UP_FORWARD => GetSquare(currentSquare.XCoord + 1, currentSquare.YCoord + 1),
                 MovementDirection.FORWARD => GetSquare(currentSquare.XCoord + 1, currentSquare.YCoord),
-                MovementDirection.DOWN => GetSquare(currentSquare.XCoord, currentSquare.YCoord + 1),
+                MovementDirection.DOWN_FORWARD => GetSquare(currentSquare.XCoord + 1, currentSquare.YCoord - 1),
+                MovementDirection.DOWN => GetSquare(currentSquare.XCoord, currentSquare.YCoord - 1),
                 MovementDirection.BACKWARD => GetSquare(currentSquare.XCoord - 1, currentSquare.YCoord),
                 _ => currentSquare,
             };
@@ -51,11 +53,11 @@
 
         private void CreateTrack()
         {
-            PhysicalRaceTrack = new RaceSquare[Length, Width];
+            PhysicalRaceTrack = new RaceSquare[Length, TrackWidth];
 
             for (int trackXCoord = 0; trackXCoord < Length; trackXCoord++)
             {
-                for (int trackYCoord = 0; trackYCoord < Width; trackYCoord++)
+                for (int trackYCoord = 0; trackYCoord < TrackWidth; trackYCoord++)
                 {
                     PhysicalRaceTrack[trackXCoord, trackYCoord] = new RaceSquare(trackXCoord, trackYCoord);
                 }
