@@ -42,7 +42,9 @@
             return direction switch
             {
                 MovementDirection.UP => GetSquare(currentSquare.XCoord, currentSquare.YCoord + 1),
+                MovementDirection.UP_FORWARD => GetSquare(currentSquare.XCoord + 1, currentSquare.YCoord + 1),
                 MovementDirection.FORWARD => GetSquare(currentSquare.XCoord + 1, currentSquare.YCoord),
+                MovementDirection.DOWN_FORWARD => GetSquare(currentSquare.XCoord + 1, currentSquare.YCoord - 1),
                 MovementDirection.DOWN => GetSquare(currentSquare.XCoord, currentSquare.YCoord - 1),
                 MovementDirection.BACKWARD => GetSquare(currentSquare.XCoord - 1, currentSquare.YCoord),
                 _ => currentSquare,

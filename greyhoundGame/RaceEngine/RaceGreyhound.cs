@@ -6,7 +6,7 @@ namespace greyhoundGame.RaceEngine
     {
         private const int PER_TURN_STAMINA_REDUCTION = 2;
         private const int STAT_DIVISOR = 3;
-        private const int TENACITY_OFFSET = 125;
+        private const int TENACITY_OFFSET = 125 / STAT_DIVISOR;
         private const int MINIMUM_SPEED = 5;
 
         private int _saltedAcceleration;
@@ -19,20 +19,21 @@ namespace greyhoundGame.RaceEngine
         private int SaltedTopSpeed { get; set; }
 
         public Greyhound Greyhound { get; private set; }
-        
-        public int CurrentSpeed 
+
+        public int CurrentSpeed
         {
-            get => (_currentSpeed + _speedWobble) /STAT_DIVISOR;
-            private set => _currentSpeed = value; 
+            get => _currentSpeed + _speedWobble;
+            set => _currentSpeed = value;
         }
-        private int SaltedTenacity 
-        { 
+        private int SaltedTenacity
+        {
             get => _saltedTenacity + _tenacityWobble;
-            set => _saltedTenacity = value; 
+            set => _saltedTenacity = value;
         }
-        private int SaltedAcceleration {
-            get => _saltedAcceleration + _accelerationWobble; 
-            set => _saltedAcceleration = value; 
+        private int SaltedAcceleration 
+        {
+            get => _saltedAcceleration + _accelerationWobble;
+            set => _saltedAcceleration = value;
         }
 
         public int CurrentStam { get; set; }
@@ -41,9 +42,10 @@ namespace greyhoundGame.RaceEngine
         public int FinishedTime { get; set; }
         public Position CurrentPosition { get; set; }
         public RaceSquare LocationLastTurn { get; private set; }
-        public RaceSquare Coordinates { get; set;}
+        public RaceSquare Coordinates { get; set; }
         public RaceTrack Track { get; set; }
         public int StartingBox { get; set; }
+        public MovementDirection MoveDirection {get; set;}
         public int DistanceToFinish
         {
             get
@@ -94,18 +96,19 @@ namespace greyhoundGame.RaceEngine
             Greyhound = hound;
             _currentSpeed = 0;
             TimeLastTurn = 0;
-            CurrentStam = (Greyhound.Stats.Stamina.StatValue + GetSalt());
-            SaltedTopSpeed = Greyhound.Stats.TopSpeed.StatValue + GetSalt();
-            SaltedTenacity = Greyhound.Stats.Tenacity.StatValue + GetSalt();
-            SaltedAcceleration = Greyhound.Stats.Tenacity.StatValue + GetSalt();
+            CurrentStam = Greyhound.Stats.Stamina.StatValue + GetSalt();
+            SaltedTopSpeed = (Greyhound.Stats.TopSpeed.StatValue + GetSalt()) / STAT_DIVISOR;
+            SaltedTenacity = (Greyhound.Stats.Tenacity.StatValue + GetSalt()) / STAT_DIVISOR;
+            SaltedAcceleration = (Greyhound.Stats.Tenacity.StatValue + GetSalt()) /STAT_DIVISOR;
             Finished = false;                                                                          
             FinishedTime = -1;
+            MoveDirection = MovementDirection.FORWARD;
         }
 
         public void Accelerate()
         {
             if (_currentSpeed < SaltedTopSpeed && CurrentStam != 0)
-                _currentSpeed += SaltedAcceleration / STAT_DIVISOR;
+                _currentSpeed += SaltedAcceleration;
         }
 
         public void Tire()
@@ -115,19 +118,19 @@ namespace greyhoundGame.RaceEngine
             else 
             {
                 CurrentStam = 0;
-                CurrentSpeed -= (TENACITY_OFFSET - SaltedTenacity) / STAT_DIVISOR;
+                CurrentSpeed -= (TENACITY_OFFSET - SaltedTenacity);
                 
                 if (CurrentSpeed < MINIMUM_SPEED)
                     CurrentSpeed = MINIMUM_SPEED;
             }
         }
 
-        public void UpdatePosition(int time, MovementDirection movementDirection)
+        public void UpdatePosition(int time)
         {
             UpdateLocationLastTurn(time);
 
             if(!Finished)
-                Coordinates = Track.GetSquare(movementDirection, Coordinates);
+                Coordinates = Track.GetSquare(MoveDirection, Coordinates);
 
             if (Coordinates == Track.FinishLine && !Finished)
             {
@@ -154,18 +157,16 @@ namespace greyhoundGame.RaceEngine
                 TimeLastTurn = timeNow;
             }
         }
-
         public void WobbleStats()
         {
             _accelerationWobble = StatWobble();
             _speedWobble = StatWobble();
             _tenacityWobble = StatWobble();
         }
-
         private int StatWobble()
         {
             Random dice = new Random();
-            return dice.Next(-15, 16);
+            return dice.Next(-5, 6);
         }
     }
 

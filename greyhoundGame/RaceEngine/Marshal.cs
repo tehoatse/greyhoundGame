@@ -45,6 +45,5 @@ namespace greyhoundGame.RaceEngine
             }
             return null;
         }
-
     }
 }

@@ -29,25 +29,27 @@ namespace greyhoundGame.RaceEngine
         public RaceSquare HoundLocation { get; private set; }
 
         private List<RaceSquare> nearbySquares;
+        private Marshal _marshal;
 
-        public List<RaceGreyhound> nearbyHounds { get; set; }
+        public List<RaceGreyhound> NearbyHounds { get; set; }
 
-        public HoundRadar(RaceGreyhound hound)
+        public HoundRadar(RaceGreyhound hound, Marshal marshal)
         {
             Hound = hound;
+            _marshal = marshal;
             HoundLocation = Hound.Coordinates;
         }
         
         private void refreshRadar()
         {
-            nearbyHounds.Clear();
+            NearbyHounds.Clear();
             HoundLocation = Hound.Coordinates;
             GetNearbySquares();
             foreach(var square in nearbySquares)
             {
                 if (square.HasGreyhound)
                 {
-                    nearbyHounds.Add(square);
+                    NearbyHounds.Add(_marshal.getHoundByLocation(square));
                 }
             }
         }

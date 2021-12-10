@@ -16,7 +16,6 @@ namespace greyhoundGame.RaceEngine
         private MovementManager raceMover;
         private Marshal _marshal;
 
-
         // how many ticks have gone
         private int timePassed = 0;
 
@@ -28,8 +27,6 @@ namespace greyhoundGame.RaceEngine
             AddHounds(greyhounds, _track);
             _marshal = new Marshal(raceHounds, _track);
             raceMover = new MovementManager(raceHounds);
-            
-            
         }
 
         public Results Start()
