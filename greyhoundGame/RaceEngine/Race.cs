@@ -26,7 +26,7 @@ namespace greyhoundGame.RaceEngine
             _track = new RaceTrack(venue, distance, greyhounds.Length);
             AddHounds(greyhounds, _track);
             _marshal = new Marshal(raceHounds, _track);
-            raceMover = new MovementManager(raceHounds);
+            raceMover = new MovementManager(_marshal);
         }
 
         public Results Start()

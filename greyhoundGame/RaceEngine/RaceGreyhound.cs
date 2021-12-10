@@ -22,7 +22,14 @@ namespace greyhoundGame.RaceEngine
 
         public int CurrentSpeed
         {
-            get => _currentSpeed + _speedWobble;
+            get
+            {
+                if (NearbyHounds)
+                    return _currentSpeed + _speedWobble - 5;
+
+                return _currentSpeed + _speedWobble;
+            }
+                
             set => _currentSpeed = value;
         }
         private int SaltedTenacity
@@ -36,6 +43,7 @@ namespace greyhoundGame.RaceEngine
             set => _saltedAcceleration = value;
         }
 
+        public bool NearbyHounds { get; set; }
         public int CurrentStam { get; set; }
         public int TimeLastTurn { get; private set; }
         public bool Finished { get; set; }
@@ -90,7 +98,6 @@ namespace greyhoundGame.RaceEngine
                 return 10;
             return 20; // aaaaawesome!
         }
-
         private void BuildHound(Greyhound hound)
         {
             Greyhound = hound;

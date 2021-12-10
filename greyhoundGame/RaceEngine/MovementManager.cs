@@ -4,7 +4,7 @@ namespace greyhoundGame.RaceEngine
 {
     class MovementManager
     {
-        // a token is created for each hound every game 'turn'
+        private Marshal _marshall;
         public RaceGreyhound[] Hounds { set; get; }
         public MovementToken[] Movements { get; set; }
 
@@ -12,9 +12,10 @@ namespace greyhoundGame.RaceEngine
 
         private const float FASTEST_POSSIBLE_HOUND = 70f;
 
-        public MovementManager(RaceGreyhound[] hounds)
+        public MovementManager(Marshal marshal)
         {
-            Hounds = hounds;
+            _marshall = marshal;
+            Hounds = _marshall.GetHounds();
         }
 
         public void MovementGameTurn(int time)
@@ -22,7 +23,7 @@ namespace greyhoundGame.RaceEngine
             timePassedInRace = time;
             CreateMovementTokens();
             for (int counter = 0; counter < FASTEST_POSSIBLE_HOUND; counter++)
-                UpdateTokens();
+                PerformRacePace();
         }
 
         private void CreateMovementTokens()
@@ -34,13 +35,39 @@ namespace greyhoundGame.RaceEngine
             }
         }
 
-        private void UpdateTokens()
+        private void PerformRacePace()
         {
+            _marshall.ActionCommandList();
+
             foreach (var potentialPace in Movements)
             {
                 potentialPace.UpdatePace(timePassedInRace);
             }
-        }
 
+            _marshall.RefreshEye();
+            
+            foreach (var radar in _marshall.Eye.Radar)
+            {
+                if(radar.NearbyHounds.Count > 0)
+                {
+                    SpeedIncrementer incrementer = new SpeedIncrementer();
+                    incrementer.AddCommand(radar.Hound, -5);
+                    _marshall.QueueCommand(incrementer);
+                }
+                else if(radar.NearbyHounds.Count == 0)
+                {
+                    FreedomUpdater updater = new FreedomUpdater();
+                    updater.AddCommand(radar.Hound, 0);
+                    _marshall.QueueCommand(updater);
+
+                }
+                else if(radar.HoundInFront != null)
+                {
+                    NewSpeedUpdater updater = new NewSpeedUpdater();
+                    updater.AddCommand(radar.HoundInFront, radar.HoundInFront.CurrentSpeed);
+                    _marshall.QueueCommand(updater);
+                }
+            }
+        }
     }
 }

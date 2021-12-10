@@ -25,45 +25,72 @@ namespace greyhoundGame.RaceEngine
             Tuple.Create(2, -2),
         };
 
+        public RaceGreyhound NextHound { get; set; }
+
         public RaceGreyhound Hound { get; private set; }
         public RaceSquare HoundLocation { get; private set; }
 
-        private List<RaceSquare> nearbySquares;
+        private List<RaceSquare> _nearbySquares;
         private Marshal _marshal;
+        private List<RaceSquare> _squaresWithHounds;
+        private RaceSquare _nextSquare;
 
         public List<RaceGreyhound> NearbyHounds { get; set; }
+
+        public RaceGreyhound HoundInFront { get; private set; }
 
         public HoundRadar(RaceGreyhound hound, Marshal marshal)
         {
             Hound = hound;
             _marshal = marshal;
             HoundLocation = Hound.Coordinates;
+            NearbyHounds = new List<RaceGreyhound>();
+            _nearbySquares = new List<RaceSquare>();
         }
         
-        private void refreshRadar()
+        public void RefreshRadar()
         {
             NearbyHounds.Clear();
             HoundLocation = Hound.Coordinates;
-            GetNearbySquares();
-            foreach(var square in nearbySquares)
+            FindNearbySquares();
+            _squaresWithHounds = _marshal.GetSquaresWithHounds();
+
+
+            foreach (var square in _nearbySquares)
             {
-                if (square.HasGreyhound)
+                foreach (var houndLocation in _squaresWithHounds)
+                if (square == houndLocation )
                 {
-                    NearbyHounds.Add(_marshal.getHoundByLocation(square));
+                    NearbyHounds.Add(_marshal.GetHoundByLocation(square));
                 }
+            }
+
+            FindNextSquare();
+            NextHound = null;
+
+            foreach(var square in _squaresWithHounds)
+            {
+                if (square == _nextSquare)
+                    NextHound = _marshal.GetHoundByLocation(_nextSquare);
             }
         }
 
-        private void GetNearbySquares()
+
+        private void FindNearbySquares()
         {
-            nearbySquares.Clear();
+            _nearbySquares.Clear();
             foreach(var square in RelativeNearSquares)
             {
-                nearbySquares.Add(Hound.Track.GetSquare(
+                _nearbySquares.Add(Hound.Track.GetSquare(
 
                     HoundLocation.XCoord + square.Item1,
                     HoundLocation.YCoord + square.Item2));
             }
+        }
+
+        private void FindNextSquare()
+        {
+            _nextSquare = _marshal.GetTrack().GetSquare(Hound.Coordinates.XCoord +1, Hound.Coordinates.YCoord);
         }
 
     }
