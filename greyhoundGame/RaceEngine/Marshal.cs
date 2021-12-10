@@ -8,24 +8,28 @@ namespace greyhoundGame.RaceEngine
     {
         private RaceTrack _track;
         private RaceGreyhound[] _hounds;
+        private List<IQueueableCommand> _commandList = new List<IQueueableCommand>();
+        public AllSeeingEye Eye { get; }
+        
 
         public Marshal(RaceGreyhound[] hounds, RaceTrack track)
         {
             _hounds = hounds;
             _track = track;
+            Eye = new AllSeeingEye(this);
         }
 
-        public RaceTrack getTrack()
+        public RaceTrack GetTrack()
         {
             return _track;
         }
 
-        public RaceGreyhound[] getHounds()
+        public RaceGreyhound[] GetHounds()
         {
             return _hounds;
         }
 
-        public RaceGreyhound getHoundByLocation(int xCoord, int yCoord)
+        public RaceGreyhound GetHoundByLocation(int xCoord, int yCoord)
         {
             foreach (var hound in _hounds)
             {
@@ -36,7 +40,7 @@ namespace greyhoundGame.RaceEngine
             return null;
         }
 
-        public RaceGreyhound getHoundByLocation(RaceSquare square)
+        public RaceGreyhound GetHoundByLocation(RaceSquare square)
         {
             foreach(var hound in _hounds)
             {
@@ -45,5 +49,39 @@ namespace greyhoundGame.RaceEngine
             }
             return null;
         }
+
+        public List<IQueueableCommand> GetCommandList()
+        {
+            return _commandList;
+        }
+
+        public void ActionCommandList()
+        {
+            foreach(var command in _commandList)
+            {
+                command.UpdateHound();
+            }
+        }
+
+        public void QueueCommand(IQueueableCommand command)
+        {
+            _commandList.Add(command);
+        }
+
+        public void RefreshEye()
+        {
+            Eye.RefreshAllRadars();
+        }
+
+        public List<RaceSquare> GetSquaresWithHounds()
+        {
+            List<RaceSquare> SquaresWithHounds = new List<RaceSquare>();
+            foreach (var hound in _hounds)
+            {
+                SquaresWithHounds.Add(hound.Coordinates);
+            }
+            return SquaresWithHounds;
+        }
+
     }
 }
