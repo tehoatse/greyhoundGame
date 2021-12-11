@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using greyhoundGame.RaceEngine.Utilities;
 
 namespace greyhoundGame.RaceEngine
 {
@@ -10,13 +11,11 @@ namespace greyhoundGame.RaceEngine
         private Marshal _marshal;
         private int _timePassed;
         private PositionManager _positionManager;
-        private MovementManager _movementManager; 
 
         public Turn(Marshal marshal)
         {
             _marshal = marshal;
             _timePassed = 0;
-            _movementManager = new MovementManager(_marshal);
             _positionManager = new PositionManager(_marshal.Hounds.Length);
         }
         

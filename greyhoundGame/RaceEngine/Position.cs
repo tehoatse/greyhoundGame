@@ -13,5 +13,4 @@
             OrdinalText = GreyhoundStrings.GetOrdinalName(position);
         }
     }
-
 }

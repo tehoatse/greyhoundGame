@@ -1,4 +1,5 @@
 ﻿using System;
+using greyhoundGame.RaceEngine.Utilities;
 
 namespace greyhoundGame.RaceEngine
 {
@@ -24,10 +25,16 @@ namespace greyhoundGame.RaceEngine
         {
             get
             {
-                if (NearbyHounds)
-                    return _currentSpeed + _speedWobble - 5;
+                int returnValue;
 
-                return _currentSpeed + _speedWobble;
+                if (NearbyHounds)
+                    returnValue = _currentSpeed + _speedWobble - 5;
+                else
+                    returnValue = _currentSpeed + _speedWobble;
+                
+                returnValue = returnValue < 5 ? 5 : returnValue;
+
+                return returnValue;
             }
                 
             set => _currentSpeed = value;
@@ -45,7 +52,6 @@ namespace greyhoundGame.RaceEngine
 
         public bool NearbyHounds { get; set; }
         public int CurrentStam { get; set; }
-        public int TimeLastTurn { get; private set; }
         public bool Finished { get; set; }
         public float FinishedTime { get; set; }
         public Position CurrentPosition { get; set; }
@@ -75,37 +81,15 @@ namespace greyhoundGame.RaceEngine
         }
 
         // generating a modifier to make thing random
-        private int GetSalt()
-        {
-            Random dice = new Random();
 
-            int result = dice.Next(1, 100);
-
-            // so each statement has a return on it so I'm eliminating results
-            // I'm not sure if the result periods are even and I don't care right now
-            if (result <= 4)
-                return -20; //nasty!
-            if (result <= 20)
-                return -10;
-            if (result <= 40)
-                return -5;
-            if (result <= 60)
-                return 0;
-            if (result <= 80)
-                return 5;
-            if (result <= 97)
-                return 10;
-            return 20; // aaaaawesome!
-        }
         private void BuildHound(Greyhound hound)
         {
             Greyhound = hound;
             _currentSpeed = 0;
-            TimeLastTurn = 0;
-            CurrentStam = Greyhound.Stats.Stamina.StatValue + GetSalt();
-            SaltedTopSpeed = (Greyhound.Stats.TopSpeed.StatValue + GetSalt()) / STAT_DIVISOR;
-            SaltedTenacity = (Greyhound.Stats.Tenacity.StatValue + GetSalt()) / STAT_DIVISOR;
-            SaltedAcceleration = (Greyhound.Stats.Tenacity.StatValue + GetSalt()) /STAT_DIVISOR;
+            CurrentStam = Greyhound.Stats.Stamina.StatValue + Tools.GetSalt();
+            SaltedTopSpeed = (Greyhound.Stats.TopSpeed.StatValue + Tools.GetSalt()) / STAT_DIVISOR;
+            SaltedTenacity = (Greyhound.Stats.Tenacity.StatValue + Tools.GetSalt()) / STAT_DIVISOR;
+            SaltedAcceleration = (Greyhound.Stats.Tenacity.StatValue + Tools.GetSalt()) /STAT_DIVISOR;
             Finished = false;                                                                          
             FinishedTime = -1;
             MoveDirection = MovementDirection.FORWARD;

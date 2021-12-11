@@ -75,7 +75,6 @@ namespace greyhoundGame.RaceEngine
             }
         }
 
-
         private void FindNearbySquares()
         {
             _nearbySquares.Clear();
