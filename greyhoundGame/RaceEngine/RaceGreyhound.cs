@@ -153,7 +153,7 @@ namespace greyhoundGame.RaceEngine
 
         public override string ToString()
         {
-            return $"{Greyhound.Name} {CurrentPosition.Ordinal}";
+            return $"{Greyhound.Name} {CurrentPosition.Ordinal} {_currentSpeed} {CurrentSpeed}";
         }
 
         private void UpdateLocationLastTurn(int timeNow)

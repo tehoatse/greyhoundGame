@@ -4,9 +4,7 @@ using System.Text;
 
 namespace greyhoundGame.RaceEngine
 {
-    internal interface IQueueableCommand
+    internal class Tick
     {
-        void AddCommand(RaceGreyhound hound, int i);
-        void UpdateHound();
     }
 }

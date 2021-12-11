@@ -9,6 +9,13 @@ namespace greyhoundGame.RaceEngine
         private RaceTrack _track;
         private RaceGreyhound[] _hounds;
         private List<IQueueableCommand> _commandList = new List<IQueueableCommand>();
+
+        public RaceGreyhound[] Hounds 
+        { 
+            get => _hounds;
+            set => _hounds = value;
+        
+        }
         public AllSeeingEye Eye { get; }
         
 

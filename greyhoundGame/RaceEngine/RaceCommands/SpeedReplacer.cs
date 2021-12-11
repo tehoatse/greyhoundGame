@@ -4,10 +4,16 @@ using System.Text;
 
 namespace greyhoundGame.RaceEngine
 {
-    public class NewSpeedUpdater : IQueueableCommand
+    public class SpeedReplacer : IQueueableCommand
     {
         private RaceGreyhound _hound;
         private int _newSpeed;
+
+        public SpeedReplacer(RaceGreyhound hound, int newSpeed)
+        {
+            _hound = hound;
+            _newSpeed = newSpeed;
+        }
 
         public void AddCommand(RaceGreyhound hound, int speed)
         {

@@ -9,12 +9,12 @@ namespace greyhoundGame.RaceEngine
         private RaceGreyhound _hound;
         private MovementDirection _direction;
 
-        public void AddCommand(RaceGreyhound hound, int Direction)
+        public DirectionUpdater(RaceGreyhound hound, MovementDirection direction)
         {
-            _direction = (MovementDirection)Direction;
             _hound = hound;
+            _direction = direction;
         }
-
+        
         public void UpdateHound()
         {
             _hound.MoveDirection = _direction;

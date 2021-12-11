@@ -4,20 +4,18 @@ using System.Text;
 
 namespace greyhoundGame.RaceEngine
 {
-    public class SpeedIncrementer : IQueueableCommand
+    public class FreedomUpdater : IQueueableCommand
     {
         private RaceGreyhound _hound;
-        private int _increment;
 
-        public void AddCommand(RaceGreyhound hound, int increment)
+        public FreedomUpdater(RaceGreyhound hound)
         {
             _hound = hound;
-            _increment = increment;
         }
 
         public void UpdateHound()
         {
-            _hound.NearbyHounds = true;
+            _hound.NearbyHounds = false;
         }
     }
 }

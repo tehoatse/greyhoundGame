@@ -63,7 +63,7 @@ namespace greyhoundGame.RaceEngine
                 }
                 else if(radar.HoundInFront != null)
                 {
-                    NewSpeedUpdater updater = new NewSpeedUpdater();
+                    SpeedReplacer updater = new SpeedReplacer();
                     updater.AddCommand(radar.HoundInFront, radar.HoundInFront.CurrentSpeed);
                     _marshall.QueueCommand(updater);
                 }
