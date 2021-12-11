@@ -62,8 +62,7 @@ namespace greyhoundGame.RaceEngine
             var finishedHounds = from hound in hounds where (hound.Finished == true) select hound;
             var orderedFinishedHounds =
                 finishedHounds.OrderBy(
-                    finishedHounds => finishedHounds.FinishedTime).ThenByDescending(
-                    finishedHounds => finishedHounds.LocationLastTurn.XCoord);
+                    finishedHounds => finishedHounds.FinishedTime);
             return orderedFinishedHounds.ToArray();
         }
 
@@ -85,8 +84,7 @@ namespace greyhoundGame.RaceEngine
                 return true;
             if (!currentHound.Finished)
                 return false;
-            if (currentHound.FinishedTime == nextHound.FinishedTime &&
-                currentHound.LocationLastTurn.XCoord == nextHound.LocationLastTurn.XCoord)
+            if (currentHound.FinishedTime == nextHound.FinishedTime)
                 return true;
             return false;
         }

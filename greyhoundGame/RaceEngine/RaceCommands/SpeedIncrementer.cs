@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace greyhoundGame.RaceEngine
+namespace greyhoundGame.RaceEngine.RaceCommands
 {
     public class SpeedIncrementer : IQueueableCommand
     {

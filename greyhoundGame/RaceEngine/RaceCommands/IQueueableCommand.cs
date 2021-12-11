@@ -1,4 +1,4 @@
-﻿namespace greyhoundGame.RaceEngine
+﻿namespace greyhoundGame.RaceEngine.RaceCommands
 {
     internal interface IQueueableCommand
     {

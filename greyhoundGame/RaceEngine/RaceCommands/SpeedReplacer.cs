@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace greyhoundGame.RaceEngine
+namespace greyhoundGame.RaceEngine.RaceCommands
 {
     public class SpeedReplacer : IQueueableCommand
     {
@@ -13,12 +13,6 @@ namespace greyhoundGame.RaceEngine
         {
             _hound = hound;
             _newSpeed = newSpeed;
-        }
-
-        public void AddCommand(RaceGreyhound hound, int speed)
-        {
-            _hound = hound;
-            _newSpeed = speed;
         }
 
         public void UpdateHound()

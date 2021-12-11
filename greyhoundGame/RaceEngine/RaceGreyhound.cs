@@ -47,9 +47,8 @@ namespace greyhoundGame.RaceEngine
         public int CurrentStam { get; set; }
         public int TimeLastTurn { get; private set; }
         public bool Finished { get; set; }
-        public int FinishedTime { get; set; }
+        public float FinishedTime { get; set; }
         public Position CurrentPosition { get; set; }
-        public RaceSquare LocationLastTurn { get; private set; }
         public RaceSquare Coordinates { get; set; }
         public RaceTrack Track { get; set; }
         public int StartingBox { get; set; }
@@ -132,17 +131,16 @@ namespace greyhoundGame.RaceEngine
             }
         }
 
-        public void UpdatePosition(int time)
+        public void UpdatePosition(int time, int pace)
         {
-            UpdateLocationLastTurn(time);
-
             if(!Finished)
                 Coordinates = Track.GetSquare(MoveDirection, Coordinates);
 
             if (Coordinates == Track.FinishLine && !Finished)
             {
                 Finished = true;
-                FinishedTime = time;
+                string token = $"{time}.{pace}";
+                FinishedTime = float.Parse(token);
             }
         }
         
@@ -156,14 +154,6 @@ namespace greyhoundGame.RaceEngine
             return $"{Greyhound.Name} {CurrentPosition.Ordinal} {_currentSpeed} {CurrentSpeed}";
         }
 
-        private void UpdateLocationLastTurn(int timeNow)
-        {
-            if (timeNow > TimeLastTurn && !Finished)
-            {
-                LocationLastTurn = Coordinates;
-                TimeLastTurn = timeNow;
-            }
-        }
         public void WobbleStats()
         {
             _accelerationWobble = StatWobble();

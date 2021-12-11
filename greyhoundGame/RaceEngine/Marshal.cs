@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using greyhoundGame.RaceEngine.RaceCommands;
 
 namespace greyhoundGame.RaceEngine
 {
@@ -16,14 +17,16 @@ namespace greyhoundGame.RaceEngine
             set => _hounds = value;
         
         }
-        public AllSeeingEye Eye { get; }
-        
+        public AllSeeingEye Eye { get; private set; }
+        public MovementManager MovementManager { get; private set; }
 
+        
         public Marshal(RaceGreyhound[] hounds, RaceTrack track)
         {
             _hounds = hounds;
             _track = track;
             Eye = new AllSeeingEye(this);
+            MovementManager = new MovementManager(this);
         }
 
         public RaceTrack GetTrack()
@@ -88,6 +91,29 @@ namespace greyhoundGame.RaceEngine
                 SquaresWithHounds.Add(hound.Coordinates);
             }
             return SquaresWithHounds;
+        }
+
+        public void QueueEyeActions()
+        {
+            foreach (var radar in Eye.Radar)
+            {
+                if (radar.NearbyHounds.Count > 0)
+                {
+                    SpeedIncrementer incrementer = new SpeedIncrementer(radar.Hound);
+                    QueueCommand(incrementer);
+                }
+                else if (radar.NearbyHounds.Count == 0)
+                {
+                    FreedomUpdater updater = new FreedomUpdater(radar.Hound);
+                    QueueCommand(updater);
+
+                }
+                else if (radar.HoundInFront != null)
+                {
+                    SpeedReplacer updater = new SpeedReplacer(radar.Hound, radar.HoundInFront.CurrentSpeed);
+                    QueueCommand(updater);
+                }
+            }
         }
 
     }

@@ -22,13 +22,16 @@ namespace greyhoundGame.RaceEngine
         
         public bool RunTurn()
         {
+            Pace pace = new Pace(_marshal);
+
+
             WobbleHoundStatistics();
             Console.WriteLine("\ntick");
             _timePassed++;
             bool raceGoing = true;
 
             AccelerateHounds();
-            _movementManager.MovementGameTurn(_timePassed);
+            pace.RunPaces(_timePassed);
             TireHounds();
 
             _marshal.Hounds = _positionManager.GetPositions(_marshal.Hounds);

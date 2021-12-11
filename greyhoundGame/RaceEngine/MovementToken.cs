@@ -8,23 +8,26 @@
         private float HoundIncrement { get; set; }
         private RaceGreyhound Hound { get; set; }
         private double paceCount;
+        private int paceTotal;
 
 
-        public MovementToken(RaceGreyhound hound, float fastestHoundPace)
+        public MovementToken(RaceGreyhound hound)
         {
             Hound = hound;
-            HoundIncrement = Hound.GetIncrement(fastestHoundPace);
+            HoundIncrement = Pace.FASTEST_POSSIBLE_HOUND / hound.CurrentSpeed;
             paceCount = 0;
-
+            paceTotal = 0;
         }
 
         public void UpdatePace(int time)
         {
             paceCount++;
+            paceTotal++;
+            HoundIncrement = Pace.FASTEST_POSSIBLE_HOUND / Hound.CurrentSpeed;
             if (paceCount >= HoundIncrement)
             {
                 paceCount -= HoundIncrement;
-                Hound.UpdatePosition(time);
+                Hound.UpdatePosition(time, paceTotal);
             }
         }
 
